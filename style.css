@@ -1,0 +1,65 @@
+body {
+    margin: 0;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.server-list {
+    height: 100%;
+    width: 60px;
+    background: rgb(50, 50, 50);
+}
+
+.message-wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(60, 60, 60);
+}
+
+.message {
+    font-family: 'Roboto', sans-serif;
+    border-bottom: 1px solid rgb(80, 80, 80);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 20px;
+    margin-right: 6px;
+}
+
+.message h2 {
+    color: white;
+    font-size: 20px;
+    font-weight: 200;
+    margin: 0;
+    padding-bottom: 3px;
+}
+
+.message div {
+    color: rgb(175, 175, 175);
+    font-size: 15px;
+    font-weight: 100;
+}
+
+.message img {
+    width: 25px;
+    height: auto;
+}
+
+.server {
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.server img {
+    width: 50px;
+    height: auto;
+    border-radius: 100%;
+}
