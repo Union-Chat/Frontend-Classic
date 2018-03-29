@@ -69,3 +69,22 @@ body {
     height: auto;
     border-radius: 100%;
 }
+
+.chatbox {
+    color: white;
+    position: relative;
+    background: rgb(70, 70, 70);
+    width: 50%;
+    height: 30px;
+    border: none;
+    border-radius: 3px;
+    padding-left: 5px;
+    margin-left: 25%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    bottom: 0%;
+}
+
+.chatbox:focus {
+    outline: none;
+}
