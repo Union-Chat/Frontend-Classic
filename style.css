@@ -45,11 +45,17 @@ body {
     color: rgb(175, 175, 175);
     font-size: 15px;
     font-weight: 100;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .message img {
-    width: 25px;
-    height: auto;
+    height: 1rem;
+    width: 1rem;
+    min-width: 22px;
+    min-height: 22px;
+    object-fit: contain;
+    vertical-align: -.4em;
 }
 
 .server {
