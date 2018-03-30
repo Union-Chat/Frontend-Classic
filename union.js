@@ -56,9 +56,9 @@ function handleWSClose(close) {
 }
 
 function parseText (text) {
-    const filtered = text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace('\r\n', '<br>').replace(/\n/g, '<br>');
+    let filtered = text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace('\r\n', '<br>').replace(/\n/g, '<br>');
 
-    const emojisInText = text.match(/:\w+:/g);
+    const emojisInText = filtered.match(/:\w+:/g);
     if (emojisInText) {
         for (const emoji of emojisInText) {
             let src;
@@ -66,14 +66,14 @@ function parseText (text) {
             if (emojis.has(emoji)) {
                 src = emojis.get(emoji);
             } else if (emojiShorthandMap[emoji]) {
-                src = `./emoji/${emojiShorthandMap[emoji]}.svg`
+                src = `./emoji/${emojiShorthandMap[emoji]}.svg`;
             }
 
-            text = text.replace(emoji, `<img src="${src}">`);
+            filtered = filtered.replace(emoji, `<img src="${src}">`);
         }
     }
 
-    return text;
+    return filtered;
 }
 
 function handleWSMessage(message) {
@@ -102,6 +102,10 @@ function handleWSMessage(message) {
         }
 
         if (j.op === 3) {
+            if (j.d.server !== selectedServer) {
+                return;
+            }
+
             const messageContent = document.createElement('div');
             messageContent.innerHTML = parseText(j.d.content);
 
@@ -113,14 +117,13 @@ function handleWSMessage(message) {
             } else {
                 const m = document.createElement('div');
                 m.setAttribute('class', 'message');
-    
+
                 const author = document.createElement('h2');
                 author.innerText = j.d.author;
-    
-    
+
                 m.appendChild(author);
                 m.appendChild(messageContent);
-    
+
                 const container = document.getElementById('message-container');
                 container.appendChild(m);
                 container.scrollTop = container.scrollHeight;
