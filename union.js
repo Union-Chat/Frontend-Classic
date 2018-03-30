@@ -2,7 +2,7 @@ const boldRegex = /(\*\*).+(\*\*)/g;
 const validEmojis = (() => {
     const request = new XMLHttpRequest();
     request.open('GET', '/emojis.json', false);
-    request.send(null);
+    request.send();
 
     if (request.status !== 200) {
         return; // todo: report err
