@@ -23,7 +23,7 @@ function requestPassword(username) {
 }
 
 function connect(username, password) {
-    ws = new WebSocket(`ws://127.0.0.1:443`); // ws://${username}:${password}@union.serux.pro:2082
+    ws = new WebSocket(`ws://union.serux.pro:2082`);
     ws.onopen = () => authenticateClient(username, password); // Stupid JS Websocket doesn't support headers REEEEEEEEE
     ws.onclose = handleWSClose;
     ws.onmessage = handleWSMessage;
@@ -44,6 +44,22 @@ function handleWSMessage(message) {
 
         if (j.op === 1) {
             alert('Hey bitch, you logged in');
+        }
+
+        if (j.op === 3) {
+            const m = document.createElement('div');
+            m.setAttribute('class', 'message');
+
+            const author = document.createElement('h2');
+            author.innerHTML = j.d.author;
+
+            const content = document.createElement('div');
+            content.innerHTML = j.d.content;
+
+            m.appendChild(author);
+            m.appendChild(content);
+
+            document.getElementById('message-container').appendChild(m);
         }
     } catch(e) {
         console.log(e);
