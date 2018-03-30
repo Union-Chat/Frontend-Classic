@@ -69,7 +69,7 @@ function parseText (text) {
                 continue;
             }
 
-            filtered = filtered.replace(emoji, `<div data-tooltip="${emoji.toLowerCase()}"><img src="./emoji/${image}"></div>`)
+            filtered = filtered.replace(emoji, `<span data-tooltip="${emoji.toLowerCase().replace(/:/g, '\u200b:')}"><img src="./emoji/${image}"></span>`)
         }
     }
 
