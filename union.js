@@ -62,7 +62,7 @@ function parseText (text) {
         for (let emoji of emojisInText) {
             const image = validEmojis.find(e => e.toLowerCase().split('.').shift() === emoji.toLowerCase().slice(1, -1));
             if (!image) {
-                return;
+                continue;
             }
 
             filtered = filtered.replace(emoji, `<img src="./emoji/${image}">`)
@@ -175,9 +175,3 @@ function addMessage(message) { // This will come in handy later when we implemen
         document.getElementById('message-container').appendChild(m);
     }
 }
-
-const emojis = new Map([
-    [':thinkman:', 'https://cdn.discordapp.com/emojis/427561917989650444.png?v=1'],
-    [':sad:', 'https://cdn.discordapp.com/emojis/409499960128569346.png?v=1'],
-    [':mmspin:', 'https://cdn.discordapp.com/emojis/422820729042763777.gif?v=1']
-]);
