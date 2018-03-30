@@ -104,10 +104,11 @@ function handleWSMessage(message) {
 
             addMessage(j.d);
 
-            // if (j.d.content.includes(`@${currentUser}`) && Notification) { // Mention
-            //     const notif = new Notification('Union');
-            //     notif.
-            // }
+            /*
+            if (j.d.content.includes(`@${currentUser}`) && Notification) { // Mention
+                const notif = new Notification('Union');
+                notif.
+            }*/
 
             const container = document.getElementById('message-container');
             container.scrollTop = container.scrollHeight;
