@@ -126,8 +126,8 @@ function handleWSMessage(message) {
 
                 const container = document.getElementById('message-container');
                 container.appendChild(m);
-                container.scrollTop = container.scrollHeight;
             }
+            container.scrollTop = container.scrollHeight;
         }
     } catch(e) {
         console.log(e);
