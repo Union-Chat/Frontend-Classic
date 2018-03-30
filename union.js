@@ -59,7 +59,9 @@ function handleWSMessage(message) {
             m.appendChild(author);
             m.appendChild(content);
 
-            document.getElementById('message-container').appendChild(m);
+            const container = document.getElementById('message-container');
+            container.appendChild(m);
+            container.scrollTop = container.scrollHeight;
         }
     } catch(e) {
         console.log(e);
