@@ -43,7 +43,19 @@ function handleWSMessage(message) {
         const j = JSON.parse(message.data);
 
         if (j.op === 1) {
-            alert('Hey bitch, you logged in');
+            const chatbox = document.getElementById('whatthefuckdidyoujustsayaboutme');
+            chatbox.addEventListener('keydown', snedMeHarder);
+
+            const list = document.createElement('datalist');
+            list.setAttribute('id', 'suggestions');
+            
+            for (let emoji of emojis) {
+                const opt = document.createAttribute('option');
+                opt.value = emoji[0];
+                list.appendChild(opt);
+            }
+
+            chatbox.setAttribute('list', list);
         }
 
         if (j.op === 3) {
@@ -54,7 +66,7 @@ function handleWSMessage(message) {
             author.innerText = j.d.author;
 
             const content = document.createElement('div');
-            let filtered = j.d.content.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            let filtered = j.d.content.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace('\r\n', '<br>').replace(/\n/g, '<br>');
 
             for (let emoji of emojis) {
                 while (filtered.includes(emoji[0])) {
@@ -76,6 +88,28 @@ function handleWSMessage(message) {
     }
 }
 
+function snedMeHarder(event) {
+    const elemelon = document.getElementById('whatthefuckdidyoujustsayaboutme');
+    const msg = elemelon.value;
+
+    if (event.keyCode === 13 && !event.shiftKey) {
+        if (ws !== null && ws.readyState === WebSocket.OPEN && msg.length > 0) {
+            event.preventDefault();
+            const payload = {
+                op: 8,
+                d: {
+                    server: 1,
+                    content: msg
+                }
+            }
+
+            ws.send(JSON.stringify(payload));
+            elemelon.value = '';
+        }
+    }
+}
+
 const emojis = new Map([
-    [':thinkMan:', 'https://cdn.discordapp.com/emojis/427561917989650444.png?v=1']
+    [':thinkMan:', 'https://cdn.discordapp.com/emojis/427561917989650444.png?v=1'],
+    [':sad:', 'https://cdn.discordapp.com/emojis/409499960128569346.png?v=1']
 ]);

@@ -83,6 +83,7 @@ body {
 }
 
 .chatbox {
+    font-family: 'Roboto', sans-serif;
     color: white;
     background: rgb(70, 70, 70);
     height: 30px;
