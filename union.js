@@ -106,27 +106,9 @@ function handleWSMessage(message) {
                 return;
             }
 
-            const messageContent = document.createElement('div');
-            messageContent.innerHTML = parseText(j.d.content);
+            addMessage(j.d);
 
-            const allMessages = document.querySelectorAll('.message');
-            const lastMessage = allMessages[allMessages.length - 1];
-
-            if (lastMessage && lastMessage.querySelector('h2').innerHTML === j.d.author) {
-                lastMessage.appendChild(messageContent);
-            } else {
-                const m = document.createElement('div');
-                m.setAttribute('class', 'message');
-
-                const author = document.createElement('h2');
-                author.innerText = j.d.author;
-
-                m.appendChild(author);
-                m.appendChild(messageContent);
-
-                const container = document.getElementById('message-container');
-                container.appendChild(m);
-            }
+            const container = document.getElementById('message-container');
             container.scrollTop = container.scrollHeight;
         }
     } catch(e) {
@@ -161,6 +143,29 @@ function switchServer(server) {
 
     chatbox.removeAttribute('readonly');
     chatbox.setAttribute('placeholder', `Message ${name}...`);
+}
+
+function addMessage(message) { // This will come in handy later when we implement caching
+    const messageContent = document.createElement('div');
+    messageContent.innerHTML = parseText(message.content);
+
+    const allMessages = document.querySelectorAll('.message');
+    const lastMessage = allMessages[allMessages.length - 1];
+
+    if (lastMessage && lastMessage.querySelector('h2').innerHTML === message.author) {
+        lastMessage.appendChild(messageContent);
+    } else {
+        const m = document.createElement('div');
+        m.setAttribute('class', 'message');
+
+        const author = document.createElement('h2');
+        author.innerText = message.author;
+
+        m.appendChild(author);
+        m.appendChild(messageContent);
+
+        document.getElementById('message-container').appendChild(m);
+    }
 }
 
 const emojis = new Map([
