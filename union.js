@@ -38,7 +38,7 @@ function requestPassword(username) {
 }
 
 function connect(username, password) {
-    ws = new WebSocket('wss://serux.pro:2096');
+    ws = new WebSocket('wss://union.serux.pro:2096');
     ws.onopen = () => authenticateClient(username, password); // Stupid JS Websocket doesn't support headers REEEEEEEEE
     ws.onclose = handleWSClose;
     ws.onmessage = handleWSMessage;
