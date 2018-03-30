@@ -1,5 +1,6 @@
 const boldRegex = /(\*\*).+(\*\*)/g;
 
+let currentUser;
 let ws = null;
 let selectedServer = null;
 let emojiShorthandMap = null;
@@ -27,7 +28,7 @@ function requestPassword(username) {
 }
 
 function connect(username, password) {
-    ws = new WebSocket('ws://union.serux.pro:2082');
+    ws = new WebSocket('wss://serux.pro:2096');
     ws.onopen = () => authenticateClient(username, password); // Stupid JS Websocket doesn't support headers REEEEEEEEE
     ws.onclose = handleWSClose;
     ws.onmessage = handleWSMessage;
@@ -49,6 +50,7 @@ function connect(username, password) {
 function authenticateClient(username, password) {
     const b64 = btoa(`${username}:${password}`); // Encode to base64
     ws.send(`Basic ${b64}`);
+    currentUser = username;
 }
 
 function handleWSClose(close) {
@@ -108,6 +110,11 @@ function handleWSMessage(message) {
 
             addMessage(j.d);
 
+            if (j.d.content.includes(`@${currentUser}`) && Notification) { // Mention
+                const notif = new Notification('Union');
+                notif.
+            }
+
             const container = document.getElementById('message-container');
             container.scrollTop = container.scrollHeight;
         }
@@ -147,7 +154,13 @@ function switchServer(server) {
 
 function addMessage(message) { // This will come in handy later when we implement caching
     const messageContent = document.createElement('div');
+    const mentions = message.content.includes(`@${currentUser}`);
+
     messageContent.innerHTML = parseText(message.content);
+
+    if (mentions) {
+        messageContent.setAttribute('style', 'background: rgb(70, 70, 70);');
+    }
 
     const allMessages = document.querySelectorAll('.message');
     const lastMessage = allMessages[allMessages.length - 1];
