@@ -1,8 +1,19 @@
 const boldRegex = /(\*\*).+(\*\*)/g;
+const validEmojis = (() => {
+    const request = new XMLHttpRequest();
+    request.open('GET', '/emojis.json', false);
+    request.send(null);
 
+    if (request.status !== 200) {
+        return; // todo: report err
+    }
+
+    return JSON.parse(request.responseText);
+})();
+
+let currentUser;
 let ws = null;
 let selectedServer = null;
-let emojiShorthandMap = null;
 
 window.onload = requestUsername;
 
@@ -27,28 +38,16 @@ function requestPassword(username) {
 }
 
 function connect(username, password) {
-    ws = new WebSocket('ws://union.serux.pro:2082');
+    ws = new WebSocket('wss://serux.pro:2096');
     ws.onopen = () => authenticateClient(username, password); // Stupid JS Websocket doesn't support headers REEEEEEEEE
     ws.onclose = handleWSClose;
     ws.onmessage = handleWSMessage;
-
-    emojiShorthandMap = (() => {
-        const request = new XMLHttpRequest();
-        request.open('GET', 'https://api.github.com/gists/73bed98674c11764971a9f021a677fc7', false);
-        request.send(null);
-
-        if (request.status !== 200) {
-            return; // todo: report err
-        }
-
-        const data = JSON.parse(request.responseText);
-        return JSON.parse(data.files['ass.json'].content);
-    })();
 }
 
 function authenticateClient(username, password) {
     const b64 = btoa(`${username}:${password}`); // Encode to base64
     ws.send(`Basic ${b64}`);
+    currentUser = username;
 }
 
 function handleWSClose(close) {
@@ -60,16 +59,13 @@ function parseText (text) {
 
     const emojisInText = filtered.match(/:\w+:/g);
     if (emojisInText) {
-        for (const emoji of emojisInText) {
-            let src;
-
-            if (emojis.has(emoji)) {
-                src = emojis.get(emoji);
-            } else if (emojiShorthandMap[emoji]) {
-                src = `./emoji/${emojiShorthandMap[emoji]}.svg`;
+        for (let emoji of emojisInText) {
+            const image = validEmojis.find(e => e.toLowerCase().split('.').shift() === emoji.toLowerCase().slice(1, -1));
+            if (!image) {
+                return;
             }
 
-            filtered = filtered.replace(emoji, `<img src="${src}">`);
+            filtered = filtered.replace(emoji, `<img src="./emoji/${image}">`)
         }
     }
 
@@ -106,28 +102,15 @@ function handleWSMessage(message) {
                 return;
             }
 
-            const messageContent = document.createElement('div');
-            messageContent.innerHTML = parseText(j.d.content);
+            addMessage(j.d);
 
-            const allMessages = document.querySelectorAll('.message');
-            const lastMessage = allMessages[allMessages.length - 1];
+            // if (j.d.content.includes(`@${currentUser}`) && Notification) { // Mention
+            //     const notif = new Notification('Union');
+            //     notif.
+            // }
 
-            if (lastMessage && lastMessage.querySelector('h2').innerHTML === j.d.author) {
-                lastMessage.appendChild(messageContent);
-            } else {
-                const m = document.createElement('div');
-                m.setAttribute('class', 'message');
-
-                const author = document.createElement('h2');
-                author.innerText = j.d.author;
-
-                m.appendChild(author);
-                m.appendChild(messageContent);
-
-                const container = document.getElementById('message-container');
-                container.appendChild(m);
-                container.scrollTop = container.scrollHeight;
-            }
+            const container = document.getElementById('message-container');
+            container.scrollTop = container.scrollHeight;
         }
     } catch(e) {
         console.log(e);
@@ -163,9 +146,37 @@ function switchServer(server) {
     chatbox.setAttribute('placeholder', `Message ${name}...`);
 }
 
+function addMessage(message) { // This will come in handy later when we implement caching
+    const messageContent = document.createElement('div');
+    const mentions = message.content.includes(`@${currentUser}`);
+
+    if (mentions) {
+        messageContent.setAttribute('style', 'background: rgb(70, 70, 70);');
+    }
+
+    messageContent.innerHTML = parseText(message.content);
+
+    const allMessages = document.querySelectorAll('.message');
+    const lastMessage = allMessages[allMessages.length - 1];
+
+    if (lastMessage && lastMessage.querySelector('h2').innerHTML === message.author) {
+        lastMessage.appendChild(messageContent);
+    } else {
+        const m = document.createElement('div');
+        m.setAttribute('class', 'message');
+
+        const author = document.createElement('h2');
+        author.innerText = message.author;
+
+        m.appendChild(author);
+        m.appendChild(messageContent);
+
+        document.getElementById('message-container').appendChild(m);
+    }
+}
+
 const emojis = new Map([
     [':thinkman:', 'https://cdn.discordapp.com/emojis/427561917989650444.png?v=1'],
     [':sad:', 'https://cdn.discordapp.com/emojis/409499960128569346.png?v=1'],
-    [':eyes:', 'https://canary.discordapp.com/assets/ccf4c733929efd9762ab02cd65175377.svg'],
     [':mmspin:', 'https://cdn.discordapp.com/emojis/422820729042763777.gif?v=1']
 ]);
