@@ -70,19 +70,26 @@ body {
 
 .message div {
     color: rgb(175, 175, 175);
+    padding: 3px 0px;
     font-size: 15px;
     font-weight: 100;
     word-wrap: break-word;
     word-break: break-all;
 }
 
-.message img {
+.message img:not(.embed) {
     height: 1rem;
     width: 1rem;
     min-width: 22px;
     min-height: 22px;
     object-fit: contain;
     vertical-align: -.4em;
+}
+
+img.embed {
+    margin-top: 5px;
+    border-radius: 5px;
+    max-height: 400px;
 }
 
 .server {
@@ -131,4 +138,41 @@ body {
   .chatbox {
     height: 40px;
   }
+}
+
+[data-tooltip] {
+    position: relative;
+}
+  
+[data-tooltip]:after {
+    opacity: 0;
+    font-weight: 600;
+    visibility: hidden;
+    position: absolute;
+    content: attr(data-tooltip);
+    background: #000000;
+    border: 1px solid black;
+    border-radius: 5px;
+    color: #cccccc;
+    white-space: normal;
+    z-index: 500;
+    padding: 6px 10px;
+    transform: translateX(-67.5%) translateY(-115%);
+    transition: opacity 0.45s cubic-bezier(0.64, 0.09, 0.08, 1);
+}
+
+[data-tooltip]:hover:after {
+    display: block;
+    font-weight: 600;
+    opacity: 1;
+    visibility: visible;
+}
+
+a {
+    color: #0096cf;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }

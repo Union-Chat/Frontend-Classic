@@ -1,4 +1,8 @@
 const boldRegex = /(\*\*).+(\*\*)/g;
+const URLRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
+const emojiRegex = /:\w+:/g;
+const imageRegex = /(?:([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g
+
 const validEmojis = (() => {
     const request = new XMLHttpRequest();
     request.open('GET', '/emojis.json', false);
@@ -57,17 +61,30 @@ function handleWSClose(close) {
 function parseText (text) {
     let filtered = text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace('\r\n', '<br>').replace(/\n/g, '<br>');
 
-    const emojisInText = filtered.match(/:\w+:/g);
+    const emojisInText = filtered.match(emojiRegex);
     if (emojisInText) {
-        for (let emoji of emojisInText) {
+        for (const emoji of emojisInText) {
             const image = validEmojis.find(e => e.toLowerCase().split('.').shift() === emoji.toLowerCase().slice(1, -1));
             if (!image) {
                 continue;
             }
 
-            filtered = filtered.replace(emoji, `<img src="./emoji/${image}">`)
+            filtered = filtered.replace(emoji, `<div data-tooltip="${emoji.toLowerCase()}"><img src="./emoji/${image}"></div>`)
         }
     }
+
+    const URLsInText = filtered.match(URLRegex);
+    if (URLsInText) {
+        for (const URL of URLsInText) {
+            filtered = filtered.replace(URL, `<a target="_blank" href="${URL}">${URL}</a>`);
+
+            const imageMatch = URL.match(imageRegex);
+            if (imageMatch) {
+                filtered += `<br><img src="${imageMatch[0]}" class="embed">`
+            }
+        }
+    }
+
 
     return filtered;
 }
