@@ -2,6 +2,7 @@ const boldRegex = /(\*\*).+(\*\*)/g;
 
 let ws = null;
 let selectedServer = null;
+let emojiShorthandMap = null;
 
 window.onload = requestUsername;
 
@@ -30,6 +31,19 @@ function connect(username, password) {
     ws.onopen = () => authenticateClient(username, password); // Stupid JS Websocket doesn't support headers REEEEEEEEE
     ws.onclose = handleWSClose;
     ws.onmessage = handleWSMessage;
+
+    emojiShorthandMap = (() => {
+        const request = new XMLHttpRequest();
+        request.open('GET', 'https://api.github.com/gists/73bed98674c11764971a9f021a677fc7', false);
+        request.send(null);
+
+        if (request.status !== 200) {
+            return; // todo: report err
+        }
+
+        const data = JSON.parse(request.responseText);
+        return JSON.parse(data.files['ass.json'].content);
+    })();
 }
 
 function authenticateClient(username, password) {
@@ -41,6 +55,27 @@ function handleWSClose(close) {
     alert(`Disconnected from Union (${close.code}): ${close.reason}`);
 }
 
+function parseText (text) {
+    const filtered = text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace('\r\n', '<br>').replace(/\n/g, '<br>');
+
+    const emojisInText = text.match(/:\w+:/g);
+    if (emojisInText) {
+        for (const emoji of emojisInText) {
+            let src;
+
+            if (emojis.has(emoji)) {
+                src = emojis.get(emoji);
+            } else if (emojiShorthandMap[emoji]) {
+                src = `./emoji/${emojiShorthandMap[emoji]}.svg`
+            }
+
+            text = text.replace(emoji, `<img src="${src}">`);
+        }
+    }
+
+    return text;
+}
+
 function handleWSMessage(message) {
     try {
         const j = JSON.parse(message.data);
@@ -49,54 +84,34 @@ function handleWSMessage(message) {
             const chatbox = document.getElementById('whatthefuckdidyoujustsayaboutme');
             chatbox.addEventListener('keydown', snedMeHarder);
 
-            j.d.forEach(server => {
-                const s = document.createElement('div');
-                s.setAttribute('class', 'server');
-                s.setAttribute('server-id', server.id);
-                s.setAttribute('server-name', server.name);
-
-                const icon = document.createElement('img');
-                icon.setAttribute('src', server.iconUrl);
-
-                icon.addEventListener('click', () => switchServer(s));
-
-                s.appendChild(icon);
-
-                document.getElementById('servers').appendChild(s);
-            });
+            chatbox.removeAttribute('readonly');
+            chatbox.setAttribute('placeholder', 'Roast your friends! Oh wait, you have none');
         }
 
         if (j.op === 3) {
-            if (j.d.server !== selectedServer) {
-                return;
+            const messageContent = document.createElement('div');
+            messageContent.innerHTML = parseText(j.d.content);
+
+            const allMessages = document.querySelectorAll('.message');
+            const lastMessage = allMessages[allMessages.length - 1];
+
+            if (lastMessage && lastMessage.querySelector('h2').innerHTML === j.d.author) {
+                lastMessage.appendChild(messageContent);
+            } else {
+                const m = document.createElement('div');
+                m.setAttribute('class', 'message');
+    
+                const author = document.createElement('h2');
+                author.innerText = j.d.author;
+    
+    
+                m.appendChild(author);
+                m.appendChild(messageContent);
+    
+                const container = document.getElementById('message-container');
+                container.appendChild(m);
+                container.scrollTop = container.scrollHeight;
             }
-
-            const m = document.createElement('div');
-            m.setAttribute('class', 'message');
-
-            const author = document.createElement('h2');
-            author.innerText = j.d.author;
-
-            const content = document.createElement('div');
-            let filtered = j.d.content.replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace('\r\n', '<br>')
-                .replace(/\n/g, '<br>');
-
-            for (const emoji of emojis) {
-                while (filtered.includes(emoji[0])) {
-                    const img = `<img src="${emoji[1]}">`; // this website employs a lot of bad practices atm
-                    filtered = filtered.replace(emoji[0], img);
-                }
-            }
-            content.innerHTML = filtered;
-
-            m.appendChild(author);
-            m.appendChild(content);
-
-            const container = document.getElementById('message-container');
-            container.appendChild(m);
-            container.scrollTop = container.scrollHeight;
         }
     } catch(e) {
         console.log(e);
