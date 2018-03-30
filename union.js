@@ -51,10 +51,18 @@ function handleWSMessage(message) {
             m.setAttribute('class', 'message');
 
             const author = document.createElement('h2');
-            author.innerHTML = j.d.author;
+            author.innerText = j.d.author;
 
             const content = document.createElement('div');
-            content.innerHTML = j.d.content;
+            let filtered = j.d.content.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            for (let emoji of emojis) {
+                while (filtered.includes(emoji[0])) {
+                    const img = `<img src="${emoji[1]}">`; // this website employs a lot of bad practices atm
+                    filtered = filtered.replace(emoji[0], img);
+                }
+            }
+            content.innerHTML = filtered;
 
             m.appendChild(author);
             m.appendChild(content);
@@ -67,3 +75,7 @@ function handleWSMessage(message) {
         console.log(e);
     }
 }
+
+const emojis = new Map([
+    [':thinkMan:', 'https://cdn.discordapp.com/emojis/427561917989650444.png?v=1']
+]);
