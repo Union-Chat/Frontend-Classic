@@ -26,7 +26,7 @@ function requestPassword(username) {
 }
 
 function connect(username, password) {
-    ws = new WebSocket(`ws://union.serux.pro:2082`);
+    ws = new WebSocket('ws://union.serux.pro:2082');
     ws.onopen = () => authenticateClient(username, password); // Stupid JS Websocket doesn't support headers REEEEEEEEE
     ws.onclose = handleWSClose;
     ws.onmessage = handleWSMessage;
@@ -83,7 +83,7 @@ function handleWSMessage(message) {
                 .replace('\r\n', '<br>')
                 .replace(/\n/g, '<br>');
 
-            for (let emoji of emojis) {
+            for (const emoji of emojis) {
                 while (filtered.includes(emoji[0])) {
                     const img = `<img src="${emoji[1]}">`; // this website employs a lot of bad practices atm
                     filtered = filtered.replace(emoji[0], img);
@@ -110,15 +110,13 @@ function snedMeHarder(event) {
     if (event.keyCode === 13 && !event.shiftKey) {
         event.preventDefault();
         if (ws !== null && ws.readyState === WebSocket.OPEN && msg.length > 0) {
-            const payload = {
+            ws.send(JSON.stringify({
                 op: 8,
                 d: {
                     server: 1,
                     content: msg
                 }
-            }
-
-            ws.send(JSON.stringify(payload));
+            }));
             elemelon.value = '';
         }
     }
