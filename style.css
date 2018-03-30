@@ -140,10 +140,6 @@ img.embed {
   }
 }
 
-[data-tooltip] {
-    position: relative;
-}
-  
 [data-tooltip]:after {
     opacity: 0;
     font-weight: 600;
