@@ -84,8 +84,21 @@ function handleWSMessage(message) {
             const chatbox = document.getElementById('whatthefuckdidyoujustsayaboutme');
             chatbox.addEventListener('keydown', snedMeHarder);
 
-            chatbox.removeAttribute('readonly');
-            chatbox.setAttribute('placeholder', 'Roast your friends! Oh wait, you have none');
+            j.d.forEach(server => {
+                const s = document.createElement('div');
+                s.setAttribute('class', 'server');
+                s.setAttribute('server-id', server.id);
+                s.setAttribute('server-name', server.name);
+
+                const icon = document.createElement('img');
+                icon.setAttribute('src', server.iconUrl);
+
+                icon.addEventListener('click', () => switchServer(s));
+
+                s.appendChild(icon);
+
+                document.getElementById('servers').appendChild(s);
+            });
         }
 
         if (j.op === 3) {
