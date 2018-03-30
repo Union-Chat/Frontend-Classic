@@ -47,7 +47,7 @@ function handleWSMessage(message) {
             chatbox.addEventListener('keydown', snedMeHarder);
 
             chatbox.removeAttribute('readonly');
-            chatbox.setAttribute('placeholder', 'Roast your m8s');
+            chatbox.setAttribute('placeholder', 'Roast your friends! Oh wait, you have none');
         }
 
         if (j.op === 3) {
