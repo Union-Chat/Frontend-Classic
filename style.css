@@ -84,9 +84,9 @@ body {
 
 .chatbox {
     font-family: 'Roboto', sans-serif;
-    color: white;
+    color: rgb(210, 210, 210);
     background: rgb(70, 70, 70);
-    height: 30px;
+    height: 40px;
     border: none;
     border-radius: 3px;
     padding-left: 5px;
@@ -94,6 +94,15 @@ body {
     margin-right: 20px;
     margin-top: 5px;
     margin-bottom: 20px;
+    padding: 10px 10px 0px;
+}
+
+.chatbox::-moz-placeholder {
+    color: rgb(150, 150, 150);
+}
+
+.chatbox::-webkit-input-placeholder { /* why can't we have one standard ffs */
+    color: rgb(150, 150, 150);
 }
 
 .chatbox:focus {

@@ -46,16 +46,8 @@ function handleWSMessage(message) {
             const chatbox = document.getElementById('whatthefuckdidyoujustsayaboutme');
             chatbox.addEventListener('keydown', snedMeHarder);
 
-            const list = document.createElement('datalist');
-            list.setAttribute('id', 'suggestions');
-            
-            for (let emoji of emojis) {
-                const opt = document.createAttribute('option');
-                opt.value = emoji[0];
-                list.appendChild(opt);
-            }
-
-            chatbox.setAttribute('list', list);
+            chatbox.removeAttribute('readonly');
+            chatbox.setAttribute('placeholder', 'Roast your m8s');
         }
 
         if (j.op === 3) {
