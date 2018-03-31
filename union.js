@@ -25,7 +25,7 @@ function requestUsername() {
     const username = prompt('Please enter your Union username');
 
     if (!username) {
-        return window.close();
+        return;
     }
 
     if (username.length === 0) {
@@ -39,7 +39,7 @@ function requestPassword(username) {
     const password = prompt('Please enter your Union password');
 
     if (!password) {
-        return window.close();
+        return;
     }
 
     if (password.length === 0) {
