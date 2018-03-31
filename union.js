@@ -140,7 +140,9 @@ function handleWSMessage(message) {
             addMessage(j.d);
 
             if (j.d.content.includes(`@${currentUser}`) && Notification) { // Mention
-                new Notification(`${j.d.author} mentioned you!\n${j.d.content}`);
+                new Notification(`${j.d.author} mentioned you!`, {
+                    body: `${j.d.content}`
+                });
             }
 
             const container = document.getElementById('message-container');
