@@ -139,7 +139,7 @@ function handleWSMessage(message) {
 
             addMessage(j.d);
 
-            if (j.d.content.includes(`@${currentUser}`) && 'Notification' in window) { // Mention
+            if (j.d.content.includes(`@${currentUser}`) && 'Notification' in window && !document.hasFocus()) { // Mention
                 new Notification(`${j.d.author} mentioned you!`, {
                     body: `${j.d.content}`
                 });
