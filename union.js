@@ -108,7 +108,7 @@ function handleWSMessage(message) {
         const j = JSON.parse(message.data);
 
         if (j.op === 1) {
-            if (Notification) {
+            if ('Notification' in window) {
                 Notification.requestPermission();
             }
 
@@ -139,7 +139,7 @@ function handleWSMessage(message) {
 
             addMessage(j.d);
 
-            if (j.d.content.includes(`@${currentUser}`) && Notification) { // Mention
+            if (j.d.content.includes(`@${currentUser}`) && 'Notification' in window) { // Mention
                 new Notification(`${j.d.author} mentioned you!`, {
                     body: `${j.d.content}`
                 });
