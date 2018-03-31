@@ -15,7 +15,8 @@ const validEmojis = (() => {
     return JSON.parse(request.responseText);
 })();
 
-let currentUser;
+let _auth = null;
+let currentUser = null;
 let ws = null;
 let selectedServer = null;
 
@@ -45,25 +46,31 @@ function requestPassword(username) {
     if (password.length === 0) {
         return requestPassword(username);
     } else {
-        connect(username, password);
+        connect(`${username}:${password}`);
     }
 }
 
-function connect(username, password) {
+function connect(auth) {
     ws = new WebSocket('wss://union.serux.pro:2096');
-    ws.onopen = () => authenticateClient(username, password); // Stupid JS Websocket doesn't support headers REEEEEEEEE
+    ws.onopen = () => authenticateClient(auth); // Stupid JS Websocket doesn't support headers REEEEEEEEE
     ws.onclose = handleWSClose;
     ws.onmessage = handleWSMessage;
 }
 
-function authenticateClient(username, password) {
-    const b64 = btoa(`${username}:${password}`); // Encode to base64
+function authenticateClient(auth) {
+    _auth = auth;
+    const b64 = btoa(auth); // Encode to base64
     ws.send(`Basic ${b64}`);
     currentUser = username;
 }
 
 function handleWSClose(close) {
-    alert(`Disconnected from Union (${close.code}): ${close.reason}`);
+    if (close.code !== 4001) {
+        setTimeout(() => connect(_auth), 3e3); // try to reconnect
+    } else {
+        // Show login modal
+    }
+    //alert(`Disconnected from Union (${close.code}): ${close.reason}`);
 }
 
 function parseText (text) {
@@ -92,7 +99,6 @@ function parseText (text) {
             }
         }
     }
-
 
     return filtered;
 }
@@ -129,11 +135,9 @@ function handleWSMessage(message) {
 
             addMessage(j.d);
 
-            /*
             if (j.d.content.includes(`@${currentUser}`) && Notification) { // Mention
-                const notif = new Notification('Union');
-                notif.
-            }*/
+                new Notification(`${j.d.author} mentioned you!\n\n${j.d.content}`);
+            }
 
             const container = document.getElementById('message-container');
             container.scrollTop = container.scrollHeight;
