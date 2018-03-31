@@ -15,61 +15,37 @@ const validEmojis = (() => {
     return JSON.parse(request.responseText);
 })();
 
-let _auth = null;
+const servers = new Map();
 let currentUser = null;
+let _auth = null;
 let ws = null;
 let selectedServer = null;
-const servers = new Map();
 
-window.onload = requestUsername;
 
-function requestUsername() {
-    const username = prompt('Please enter your Union username');
-
-    if (!username) {
-        return;
-    }
-
-    if (username.length === 0) {
-        return requestUsername();
-    } else {
-        requestPassword(username);
-    }
-}
-
-function requestPassword(username) {
-    const password = prompt('Please enter your Union password');
-
-    if (!password) {
-        return;
-    }
-
-    if (password.length === 0) {
-        return requestPassword(username);
-    } else {
-        connect(`${username}:${password}`);
-    }
-}
-
-function connect(auth) {
+function connect() {
+    document.getElementById('login').style.display = 'none';
     ws = new WebSocket('wss://union.serux.pro:2096');
-    ws.onopen = () => authenticateClient(auth); // Stupid JS Websocket doesn't support headers REEEEEEEEE
+    ws.onopen = authenticateClient; // Stupid JS Websocket doesn't support headers REEEEEEEEE
     ws.onclose = handleWSClose;
     ws.onmessage = handleWSMessage;
 }
 
-function authenticateClient(auth) {
-    _auth = auth;
-    const b64 = btoa(auth); // Encode to base64
+function authenticateClient() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    _auth = `${username}:${password}`;
+    currentUser = username;
+
+    const b64 = btoa(_auth); // Encode to base64
     ws.send(`Basic ${b64}`);
-    currentUser = auth.split(':')[0];
 }
 
 function handleWSClose(close) {
     if (close.code !== 4001) {
         setTimeout(() => connect(_auth), 3e3); // try to reconnect
     } else {
-        // Show login modal
+        document.getElementById('login').style.display = 'block';
+        // TODO: Clear messages & servers
     }
     //alert(`Disconnected from Union (${close.code}): ${close.reason}`);
 }
