@@ -24,6 +24,10 @@ window.onload = requestUsername;
 function requestUsername() {
     const username = prompt('Please enter your Union username');
 
+    if (!username) {
+        return window.close();
+    }
+
     if (username.length === 0) {
         return requestUsername();
     } else {
