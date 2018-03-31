@@ -108,6 +108,10 @@ function handleWSMessage(message) {
         const j = JSON.parse(message.data);
 
         if (j.op === 1) {
+            if (Notification) {
+                Notification.requestPermission();
+            }
+
             const chatbox = document.getElementById('whatthefuckdidyoujustsayaboutme');
             chatbox.addEventListener('keydown', snedMeHarder);
 
@@ -136,7 +140,7 @@ function handleWSMessage(message) {
             addMessage(j.d);
 
             if (j.d.content.includes(`@${currentUser}`) && Notification) { // Mention
-                new Notification(`${j.d.author} mentioned you!\n\n${j.d.content}`);
+                new Notification(`${j.d.author} mentioned you!\n${j.d.content}`);
             }
 
             const container = document.getElementById('message-container');
