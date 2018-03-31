@@ -13,12 +13,13 @@ const validEmojis = (() => {
     }
 
     return JSON.parse(request.responseText);
-})();
+})//();
 
 let _auth = null;
 let currentUser = null;
 let ws = null;
 let selectedServer = null;
+const servers = new Map();
 
 window.onload = requestUsername;
 
@@ -108,7 +109,7 @@ function handleWSMessage(message) {
         const j = JSON.parse(message.data);
 
         if (j.op === 1) {
-            if ('Notification' in window) {
+            if ('Notification' in window && Notification.permission === 'default') {
                 Notification.requestPermission();
             }
 
@@ -116,6 +117,7 @@ function handleWSMessage(message) {
             chatbox.addEventListener('keydown', snedMeHarder);
 
             j.d.forEach(server => {
+                servers.set(server.id, server);
                 const s = document.createElement('div');
                 s.setAttribute('class', 'server');
                 s.setAttribute('server-id', server.id);
@@ -140,9 +142,13 @@ function handleWSMessage(message) {
             addMessage(j.d);
 
             if (j.d.content.includes(`@${currentUser}`) && 'Notification' in window && !document.hasFocus()) { // Mention
-                new Notification(`${j.d.author} mentioned you!`, {
-                    body: `${j.d.content}`
+                const notif = new Notification(`${j.d.author} mentioned you!`, {
+                    body: j.d.content
                 });
+                notif.onclick = () => {
+                    window.focus();
+                    notif.close();
+                };
             }
 
             const container = document.getElementById('message-container');
