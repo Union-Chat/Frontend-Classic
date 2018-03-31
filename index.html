@@ -8,8 +8,8 @@
 <body>
   <div class="login-modal centered" id="login">
     <h1>Sign In</h1>
-    <input id="username" placeholder="Username">
-    <input id="password" type="password" placeholder="Password">
+    <input id="username" placeholder="Username" onkeypress="handleLoginShortcuts(event)">
+    <input id="password" type="password" placeholder="Password" onkeypress="handleLoginShortcuts(event)">
     <button onclick="connect()">Login!</button>
   </div>
   <div class="content">

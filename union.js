@@ -22,6 +22,13 @@ let ws = null;
 let selectedServer = null;
 
 
+function handleLoginShortcuts(event) {
+    console.log(event)
+    if (event.keyCode === 13) {
+        connect();
+    }
+}
+
 function connect() {
     document.getElementById('login').style.display = 'none';
     ws = new WebSocket('wss://union.serux.pro:2096');
