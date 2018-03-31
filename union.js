@@ -1,7 +1,7 @@
 const boldRegex = /(\*\*).+(\*\*)/g;
-const URLRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
+const URLRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm; // eslint-disable-line
 const emojiRegex = /:\w+:/g;
-const imageRegex = /(?:([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g
+const imageRegex = /(?:([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g;
 
 const validEmojis = (() => {
     const request = new XMLHttpRequest();
@@ -84,7 +84,7 @@ function parseText (text) {
                 continue;
             }
 
-            filtered = filtered.replace(emoji, `<span data-tooltip="${emoji.toLowerCase().replace(/:/g, '\u200b:')}"><img src="./emoji/${image}"></span>`)
+            filtered = filtered.replace(emoji, `<span data-tooltip="${emoji.toLowerCase().replace(/:/g, '\u200b:')}"><img src="./emoji/${image}"></span>`);
         }
     }
 
@@ -95,7 +95,7 @@ function parseText (text) {
 
             const imageMatch = URL.match(imageRegex);
             if (imageMatch) {
-                filtered += `<br><img src="${imageMatch[0]}" class="embed">`
+                filtered += `<br><img src="${imageMatch[0]}" class="embed">`;
             }
         }
     }
