@@ -61,7 +61,7 @@ function authenticateClient(auth) {
     _auth = auth;
     const b64 = btoa(auth); // Encode to base64
     ws.send(`Basic ${b64}`);
-    currentUser = username;
+    currentUser = auth.split(':')[0];
 }
 
 function handleWSClose(close) {
