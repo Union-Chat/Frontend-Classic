@@ -38,6 +38,10 @@ function requestUsername() {
 function requestPassword(username) {
     const password = prompt('Please enter your Union password');
 
+    if (!password) {
+        return window.close();
+    }
+
     if (password.length === 0) {
         return requestPassword(username);
     } else {
