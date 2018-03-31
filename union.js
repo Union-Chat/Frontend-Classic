@@ -13,7 +13,7 @@ const validEmojis = (() => {
     }
 
     return JSON.parse(request.responseText);
-})//();
+})();
 
 let _auth = null;
 let currentUser = null;
