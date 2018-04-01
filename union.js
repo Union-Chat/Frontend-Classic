@@ -23,7 +23,6 @@ let selectedServer = null;
 
 
 function handleLoginShortcuts(event) {
-    console.log(event)
     if (event.keyCode === 13) {
         connect();
     }
