@@ -71,7 +71,7 @@ function parseText (text) {
                 continue;
             }
 
-            filtered = filtered.replace(emoji, `<div class="emoji" tt="aaa"><img src="./emoji/${image}"></div>`); //<span data-tooltip="${emoji.toLowerCase().replace(/:/g, '\u200b:')}"></span>`);
+            filtered = filtered.replace(emoji, `<img src="./emoji/${image}">`); //<span data-tooltip="${emoji.toLowerCase().replace(/:/g, '\u200b:')}"></span>`);
         }
     }
 
