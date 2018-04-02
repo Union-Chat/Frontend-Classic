@@ -4,15 +4,19 @@ const emojiRegex = /:\w+:/g;
 const imageRegex = /(?:([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g;
 
 const validEmojis = (() => {
-    const request = new XMLHttpRequest();
-    request.open('GET', '/emojis.json', false);
-    request.send();
+    try {
+        const request = new XMLHttpRequest();
+        request.open('GET', '/emojis.json', false);
+        request.send();
 
-    if (request.status !== 200) {
-        return; // todo: report err
+        if (request.status !== 200) {
+            return; // todo: report err
+        }
+
+        return JSON.parse(request.responseText);
+    } catch (_) {
+        return {};
     }
-
-    return JSON.parse(request.responseText);
 })();
 
 const servers = new Map();
