@@ -218,13 +218,3 @@ function addMessage(message) { // This will come in handy later when we implemen
         document.getElementById('message-container').appendChild(m);
     }
 }
-
-function find(map, predicate) {
-    for (const item of map.values()) {
-      if (predicate(item)) {
-          return item;
-      }
-    }
-
-    return null;
-}
