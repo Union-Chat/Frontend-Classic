@@ -231,5 +231,5 @@ a:hover {
 
 .login-modal button:hover {
   background: rgb(120, 120, 120);
-  cursor: hand;
+  cursor: pointer;
 }
