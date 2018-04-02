@@ -34,7 +34,7 @@ function handleLoginShortcuts(event) {
 
 function connect() {
     document.getElementById('login').style.display = 'none';
-    ws = new WebSocket('ws://127.0.0.1:2096'); // wss://union.serux.pro:2096
+    ws = new WebSocket('wss://union.serux.pro:2096');
     ws.onopen = authenticateClient; // Stupid JS Websocket doesn't support headers REEEEEEEEE
     ws.onclose = handleWSClose;
     ws.onmessage = handleWSMessage;
