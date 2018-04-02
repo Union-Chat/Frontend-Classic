@@ -98,7 +98,7 @@ img.embed {
   padding-top: 5px;
   padding-left: 5px;
   padding-right: 5px;
-  cursor: hand;
+  cursor: pointer;
 }
 
 .server img {
