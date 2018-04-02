@@ -168,6 +168,21 @@ img.embed {
   visibility: visible;
 }
 
+[tt]:after {
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 500;
+}
+
+[tt]:hover:after {
+    visibility: visible;
+}
+
 a {
   color: #0096cf;
   text-decoration: none;
