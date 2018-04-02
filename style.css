@@ -7,6 +7,8 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  height: 100%;
+  width: 100%;
 }
 
 .server-list {
@@ -97,7 +99,7 @@ img.embed {
   padding-top: 5px;
   padding-left: 5px;
   padding-right: 5px;
-  cursor: hand;
+  cursor: pointer;
 }
 
 .server img {
@@ -229,5 +231,5 @@ a:hover {
 
 .login-modal button:hover {
   background: rgb(120, 120, 120);
-  cursor: hand;
+  cursor: pointer;
 }
