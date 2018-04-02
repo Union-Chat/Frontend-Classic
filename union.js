@@ -10,12 +10,12 @@ const validEmojis = (() => {
         request.send();
 
         if (request.status !== 200) {
-            return; // todo: report err
+            return []; // todo: report err
         }
 
         return JSON.parse(request.responseText);
     } catch (_) {
-        return {};
+        return [];
     }
 })();
 
@@ -51,13 +51,13 @@ function authenticateClient() {
 }
 
 function handleWSClose(close) {
+    console.log(`Websocket disconnected (${close.code}): ${close.reason}`);
     if (close.code !== 4001) {
         setTimeout(() => connect(_auth), 3e3); // try to reconnect
     } else {
         document.getElementById('login').style.display = 'block';
         // TODO: Clear messages & servers
     }
-    //alert(`Disconnected from Union (${close.code}): ${close.reason}`);
 }
 
 function parseText (text) {
@@ -71,7 +71,7 @@ function parseText (text) {
                 continue;
             }
 
-            filtered = filtered.replace(emoji, `<img src="./emoji/${image}">`); // <span data-tooltip="${emoji.toLowerCase().replace(/:/g, '\u200b:')}"> </span>
+            filtered = filtered.replace(emoji, `<img src="./emoji/${image}"><span data-tooltip="${emoji.toLowerCase().replace(/:/g, '\u200b:')}"></span>`);
         }
     }
 

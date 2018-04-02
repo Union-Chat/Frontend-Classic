@@ -144,6 +144,7 @@ img.embed {
 }
 
 [data-tooltip]:after {
+  display: none;
   opacity: 0;
   font-weight: 600;
   visibility: hidden;
