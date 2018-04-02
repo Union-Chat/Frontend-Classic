@@ -71,7 +71,7 @@ function parseText (text) {
                 continue;
             }
 
-            filtered = filtered.replace(emoji, `<img src="./emoji/${image}">`); //<span data-tooltip="${emoji.toLowerCase().replace(/:/g, '\u200b:')}"></span>`);
+            filtered = filtered.replace(emoji, `<img class="emoji" src="./emoji/${image}">`); //<span data-tooltip="${emoji.toLowerCase().replace(/:/g, '\u200b:')}"></span>`);
         }
     }
 
@@ -176,9 +176,8 @@ function switchServer(server) {
 
 function addMessage(message) { // This will come in handy later when we implement caching
     const messageContent = document.createElement('div');
-    const mentions = message.content.includes(`@${currentUser}`);
 
-    if (mentions) {
+    if (message.content.includes(`@${currentUser}`)) {
         messageContent.setAttribute('style', 'background: rgb(70, 70, 70);');
     }
 
@@ -188,17 +187,44 @@ function addMessage(message) { // This will come in handy later when we implemen
     const lastMessage = allMessages[allMessages.length - 1];
 
     if (lastMessage && lastMessage.querySelector('h2').innerHTML === message.author) {
-        lastMessage.appendChild(messageContent);
+        lastMessage.getElementsByClassName('container')[0].appendChild(messageContent);
     } else {
         const m = document.createElement('div');
         m.setAttribute('class', 'message');
 
+        const avatar = document.createElement('img');
+        const user = servers.get(message.server).members.find(m => m.id === message.author);
+
+        if (user && user.avatarUrl) {
+            avatar.setAttribute('src', user.avatarUrl);
+        } else {
+            avatar.setAttribute('src', '/default_avatar.png');
+        }
+        
+        avatar.setAttribute('class', 'avatar');
+
+        const container = document.createElement('div');
+        container.setAttribute('class', 'container');
+
         const author = document.createElement('h2');
         author.innerText = message.author;
 
-        m.appendChild(author);
-        m.appendChild(messageContent);
+        container.appendChild(author);
+        container.appendChild(messageContent);
+
+        m.appendChild(avatar);
+        m.appendChild(container);
 
         document.getElementById('message-container').appendChild(m);
     }
+}
+
+function find(map, predicate) {
+    for (const item of map.values()) {
+      if (predicate(item)) {
+          return item;
+      }
+    }
+
+    return null;
 }

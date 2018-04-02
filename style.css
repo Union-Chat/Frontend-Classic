@@ -57,13 +57,20 @@ body {
   margin-left: 20px;
   margin-right: 6px;
   animation: fadein 0.4s;
+  display: flex;
+  flex-direction: row;
 }
 
 .message div+div {
   animation: fadein 0.4s;
 }
 
-.message h2 {
+.message .container {
+  display: flex;
+  flex-direction: column;
+}
+
+.message .container h2 {
   color: white;
   font-size: 20px;
   font-weight: 200;
@@ -71,7 +78,7 @@ body {
   padding-bottom: 3px;
 }
 
-.message div {
+.message .container div {
   color: rgb(175, 175, 175);
   padding: 3px 0px;
   font-size: 15px;
@@ -80,7 +87,14 @@ body {
   word-break: break-all;
 }
 
-.message img:not(.embed) {
+.message .avatar {
+  height: 40px;
+  width: auto;
+  border-radius: 100%;
+  margin-right: 10px;
+}
+
+.message .container .emoji {
   height: 1rem;
   width: 1rem;
   min-width: 22px;
