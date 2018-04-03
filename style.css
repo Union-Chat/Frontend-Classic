@@ -88,11 +88,12 @@ body {
 }
 
 .message .avatar {
-  height: 40px;
-  width: auto;
-  border-radius: 100%;
-  margin-right: 10px;
-}
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    margin-right: 10px;
+    object-fit: contain;
+  }
 
 .message .container .emoji {
   height: 1rem;
