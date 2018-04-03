@@ -32,6 +32,22 @@ function handleLoginShortcuts(event) {
     }
 }
 
+function signup() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    const req = new XMLHttpRequest();
+    req.open('POST', '/create', true);
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.onload = () => {
+        if (req.readyState === 4) {
+            alert(req.responseText);
+        }
+    };
+    req.onerror = () => alert(req.responseText);
+    req.send(JSON.stringify({ username, password }));
+}
+
 function connect() {
     document.getElementById('login').style.display = 'none';
     ws = new WebSocket('wss://union.serux.pro:2096');
