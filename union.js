@@ -68,11 +68,14 @@ function authenticateClient() {
 
 function handleWSClose(close) {
     console.log(`Websocket disconnected (${close.code}): ${close.reason}`);
+    
+    document.getElementById('servers').innerHTML = "";
+    document.getElementById('message-container').innerHTML = "";
+    
     if (close.code !== 4001) {
         setTimeout(() => connect(_auth), 3e3); // try to reconnect
     } else {
         document.getElementById('login').style.display = 'block';
-        // TODO: Clear messages & servers
     }
 }
 
