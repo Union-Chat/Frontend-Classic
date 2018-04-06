@@ -67,22 +67,23 @@ function authenticateClient() {
 }
 
 function handleWSClose(close) {
-    const servers = document.getElementById('servers');
-    const messages = document.getElementById('message-container');
-
     console.log(`Websocket disconnected (${close.code}): ${close.reason}`);
+
+    const servers = document.getElementById('servers');
 
     while(servers.firstChild) {
         servers.removeChild(servers.firstChild);
     }
 
-    while(messages.firstChild) {
-        messages.removeChild(messages.firstChild);
-    }
-
     if (close.code !== 4001) {
         setTimeout(() => connect(_auth), 3e3); // try to reconnect
     } else {
+        const messages = document.getElementById('message-container');
+
+        while(messages.firstChild) {
+            messages.removeChild(messages.firstChild);
+        }
+
         document.getElementById('login').style.display = 'block';
     }
 }
