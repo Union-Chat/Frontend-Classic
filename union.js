@@ -67,10 +67,18 @@ function authenticateClient() {
 }
 
 function handleWSClose(close) {
+    const servers = document.getElementById('servers');
+    const messages = document.getElementById('message-container');
+
     console.log(`Websocket disconnected (${close.code}): ${close.reason}`);
 
-    document.getElementById('servers').innerHTML = '';
-    document.getElementById('message-container').innerHTML = '';
+    while(servers.firstChild) {
+        servers.removeChild(servers.firstChild);
+    }
+
+    while(messages.firstChild) {
+        messages.removeChild(messages.firstChild);
+    }
 
     if (close.code !== 4001) {
         setTimeout(() => connect(_auth), 3e3); // try to reconnect
@@ -79,7 +87,7 @@ function handleWSClose(close) {
     }
 }
 
-function parseText (text) {
+function parseText(text) {
     let filtered = text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace('\r\n', '<br>').replace(/\n/g, '<br>');
 
     const emojisInText = filtered.match(emojiRegex);
