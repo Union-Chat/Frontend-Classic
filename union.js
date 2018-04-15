@@ -136,11 +136,10 @@ function handleWSMessage(message) {
                 s.setAttribute('class', 'server');
                 s.setAttribute('server-id', server.id);
                 s.setAttribute('server-name', server.name);
+                s.addEventListener('click', () => switchServer(s));
 
                 const icon = document.createElement('img');
                 icon.setAttribute('src', server.iconUrl);
-
-                icon.addEventListener('click', () => switchServer(s));
 
                 s.appendChild(icon);
 
