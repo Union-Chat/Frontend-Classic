@@ -206,14 +206,27 @@ function switchServer(server) {
         members.removeChild(members.firstChild);
     }
 
-    for (const member of servers.get(selectedServer).members) {
+    const sortedMembers = servers.get(selectedServer).members.sort((a, b) => {
+        if (a.id < b.id) {
+            return -1;
+        }
+
+        if (a.id > b.id) {
+            return 1;
+        }
+
+        return 0;
+    });
+
+    for (const member of sortedMembers) {
         const elemelon = document.createElement('div');
         const icon = document.createElement('img');
         const username = document.createElement('h2');
 
         elemelon.setAttribute('class', 'member');
         icon.setAttribute('class', member.online ? 'online' : 'offline');
-        icon.setAttribute('src', member.avatarUrl || '');
+        icon.setAttribute('src', member.avatarUrl || 'default_avatar.png');
+        icon.setAttribute('onerror', 'this.src = \'default_avatar.png\';');
         username.innerText = member.id;
 
         elemelon.appendChild(icon);
@@ -242,14 +255,11 @@ function addMessage(message) { // This will come in handy later when we implemen
         m.setAttribute('class', 'message');
 
         const avatar = document.createElement('img');
-        const user = servers.get(message.server).members.find(m => m.id === message.author);
+        const user = servers.get(message.server).members.find(m => m.id === message.author) || {};
 
-        if (user && user.avatarUrl) {
-            avatar.setAttribute('src', user.avatarUrl);
-        } else {
-            avatar.setAttribute('src', '/default_avatar.png');
-        }
-        
+        avatar.setAttribute('src', user.avatarUrl || 'default_avatar.png');
+        avatar.setAttribute('onerror', 'this.src = \'default_avatar.png\';');
+
         avatar.setAttribute('class', 'avatar');
 
         const container = document.createElement('div');
