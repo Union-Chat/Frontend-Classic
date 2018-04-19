@@ -17,6 +17,50 @@ body {
   background: rgb(50, 50, 50);
 }
 
+.member-list {
+    height: 100%;
+    width: 250px;
+    background: rgb(50, 50, 50);
+    display: flex;
+    flex-direction: column;
+}
+
+.member {
+    width: 95%;
+    height: 30px;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    padding-top: 15px;
+    padding-left: 10px;
+}
+
+.member img {
+    margin-left: 3px;
+    height: 30px;
+    width: 30px;
+    object-fit: contain;
+    border-radius: 100%;
+}
+
+.member h2 {
+    font-size: 16;
+    margin-left: 10px;
+    align-self: center;
+    font-weight: 200;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.offline {
+    border: 2px solid #be2f2f;
+}
+
+.online {
+    border: 2px solid rgb(46, 204, 113);
+}
+
 .message-wrapper {
   display: flex;
   flex-direction: column;
@@ -25,13 +69,14 @@ body {
   width: 100%;
   height: 100%;
   background: rgb(60, 60, 60);
-  box-shadow: -3px 0px 5px 2px rgba(0, 0, 0, 0.20);
+  /*box-shadow: -3px 0px 5px 2px rgba(0, 0, 0, 0.20);*/
+  box-shadow: -3px 0px 5px 2px rgba(0, 0, 0, 0.20), 3px 0px 5px 2px rgba(0, 0, 0, 0.20);
 }
 
 .messages {
   display: flex;
   width: 100%;
-  height: 89%;
+  height: 100%;
 }
 
 .message-scroller {

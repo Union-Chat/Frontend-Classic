@@ -199,6 +199,28 @@ function switchServer(server) {
 
     chatbox.removeAttribute('readonly');
     chatbox.setAttribute('placeholder', `Message ${name}...`);
+
+    const members = document.getElementById('members');
+
+    while(members.firstChild) {
+        members.removeChild(members.firstChild);
+    }
+
+    for (const member of servers.get(selectedServer).members) {
+        const elemelon = document.createElement('div');
+        const icon = document.createElement('img');
+        const username = document.createElement('h2');
+
+        elemelon.setAttribute('class', 'member');
+        icon.setAttribute('class', member.online ? 'online' : 'offline');
+        icon.setAttribute('src', member.avatarUrl || '');
+        username.innerText = member.id;
+
+        elemelon.appendChild(icon);
+        elemelon.appendChild(username);
+
+        members.appendChild(elemelon);
+    }
 }
 
 function addMessage(message) { // This will come in handy later when we implement caching
