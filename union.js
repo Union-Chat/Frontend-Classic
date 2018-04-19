@@ -207,11 +207,14 @@ function switchServer(server) {
     }
 
     const sortedMembers = servers.get(selectedServer).members.sort((a, b) => {
-        if (a.id < b.id) {
+        const aLower = a.id.toUpperCase();
+        const bLower = b.id.toUpperCase();
+
+        if (aLower < bLower) {
             return -1;
         }
 
-        if (a.id > b.id) {
+        if (aLower > bLower) {
             return 1;
         }
 
