@@ -224,6 +224,7 @@ function switchServer(server) {
         const username = document.createElement('h2');
 
         elemelon.setAttribute('class', 'member');
+        elemelon.setAttribute('id', `member-${member.id}`);
         icon.setAttribute('class', member.online ? 'online' : 'offline');
         icon.setAttribute('src', member.avatarUrl || 'default_avatar.png');
         icon.setAttribute('onerror', 'this.src = \'default_avatar.png\';');
