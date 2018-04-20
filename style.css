@@ -24,7 +24,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    box-shadow: -3px 0px 5px 2px rgba(0, 0, 0, 0.20), 3px 0px 5px 2px rgba(0, 0, 0, 0.20);
+    z-index: -1;
 }
 
 .member {
