@@ -174,10 +174,15 @@ function handleWSMessage(message) {
             const container = document.getElementById('message-container');
             container.scrollTop = container.scrollHeight;
         } else if (j.op === 4) {
+            servers.forEach(server => {
+                if (server.members.find(m => m.id === j.d.id)) {
+                    m.online === j.d.status;
+                }
+            });
             const member = document.getElementById(`member-${j.d.id}`);
 
             if (member) {
-                member.getElementsByTagName('img')[0].setAttribute('class', member.status ? 'online' : 'offline');
+                member.getElementsByTagName('img')[0].setAttribute('class', j.d.status ? 'online' : 'offline');
             }
 
         }
