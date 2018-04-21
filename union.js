@@ -69,10 +69,10 @@ function authenticateClient() {
 function handleWSClose(close) {
     console.log(`Websocket disconnected (${close.code}): ${close.reason}`);
 
-    const servers = document.getElementById('servers');
+    const serverList = document.getElementById('servers');
 
-    while(servers.firstChild) {
-        servers.removeChild(servers.firstChild);
+    while(serverList.firstChild) {
+        serverList.removeChild(serverList.firstChild);
     }
 
     if (close.code !== 4001) {
@@ -177,7 +177,7 @@ function handleWSMessage(message) {
             servers.forEach(server => {
                 const member = server.members.find(m => m.id === j.d.id);
                 if (member) {
-                    member.online === j.d.status;
+                    member.online = j.d.status;
                 }
             });
 
