@@ -137,6 +137,7 @@ body {
   word-wrap: break-word;
   word-break: break-all;
   font-family: 'Roboto', sans-serif;
+  margin: 0px;
 }
 
 .message .avatar {
