@@ -84,6 +84,12 @@ function handleWSClose(close) {
             messages.removeChild(messages.firstChild);
         }
 
+        const members = document.getElementById('members');
+
+        while(members.firstChild) {
+            members.removeChild(members.firstChild);
+        }
+
         document.getElementById('login').style.display = 'block';
     }
 }
@@ -166,6 +172,13 @@ function handleWSMessage(message) {
 
             const container = document.getElementById('message-container');
             container.scrollTop = container.scrollHeight;
+        } else if (j.op === 4) {
+            const member = document.getElementById(`member-${j.d.id}`);
+
+            if (member) {
+                member.setAttribute('class', member.status ? 'online' : 'offline');
+            }
+
         }
     } catch(e) {
         console.log(e);
