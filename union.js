@@ -175,14 +175,16 @@ function handleWSMessage(message) {
             container.scrollTop = container.scrollHeight;
         } else if (j.op === 4) {
             servers.forEach(server => {
-                if (server.members.find(m => m.id === j.d.id)) {
-                    m.online === j.d.status;
+                const member = server.members.find(m => m.id === j.d.id);
+                if (member) {
+                    member.online === j.d.status;
                 }
             });
-            const member = document.getElementById(`member-${j.d.id}`);
 
-            if (member) {
-                member.getElementsByTagName('img')[0].setAttribute('class', j.d.status ? 'online' : 'offline');
+            const element = document.getElementById(`member-${j.d.id}`);
+
+            if (element) {
+                element.getElementsByTagName('img')[0].setAttribute('class', j.d.status ? 'online' : 'offline');
             }
 
         }
