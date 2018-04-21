@@ -195,7 +195,7 @@ function handleWSMessage(message) {
 
 function snedMeHarder(event) {
     const elemelon = document.getElementById('whatthefuckdidyoujustsayaboutme');
-    const msg = elemelon.value.trim();
+    const msg = elemelon.value;
 
     if (event.keyCode === 13 && !event.shiftKey) {
         event.preventDefault();
@@ -262,7 +262,7 @@ function switchServer(server) {
 }
 
 function addMessage(message) { // This will come in handy later when we implement caching
-    const messageContent = document.createElement('div');
+    const messageContent = document.createElement('pre');
 
     if (message.content.includes(`@${currentUser}`)) {
         messageContent.setAttribute('style', 'background: rgb(70, 70, 70);');
