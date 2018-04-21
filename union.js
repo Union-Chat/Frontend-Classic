@@ -127,6 +127,7 @@ function parseText(text) {
 function handleWSMessage(message) {
     try {
         const j = JSON.parse(message.data);
+        console.log('Got WS message', j);
 
         if (j.op === 1) {
             if ('Notification' in window && Notification.permission === 'default') {
@@ -176,7 +177,7 @@ function handleWSMessage(message) {
             const member = document.getElementById(`member-${j.d.id}`);
 
             if (member) {
-                member.setAttribute('class', member.status ? 'online' : 'offline');
+                member.getElementsByTagName('img')[0].setAttribute('class', member.status ? 'online' : 'offline');
             }
 
         }
