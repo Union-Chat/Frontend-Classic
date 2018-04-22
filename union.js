@@ -105,6 +105,15 @@ function parseText(text) {
         }
     }
 
+    const boldInText = filtered.match(boldRegex);
+    if(boldInText) {
+        for (const bold of boldInText) {
+            console.log(bold)
+            filtered = filtered.replace(bold, `<b>${bold}</b>`);
+            filtered = filtered.replace(/(\*\*)/g, '');
+        }
+    }
+
     return filtered;
 }
 
