@@ -3,21 +3,16 @@ const URLRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~
 const emojiRegex = /:\w+:/g;
 const imageRegex = /(?:([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g;
 
-const validEmojis = (() => {
+const validEmojis = (async () => {
     try {
-        const request = new XMLHttpRequest();
-        request.open('GET', '/emojis.json', false);
-        request.send();
+        const req = await request('GET', '/emojis.json')
+            .catch(() => ([]));
 
-        if (request.status !== 200) {
-            return []; // todo: report err
-        }
-
-        return JSON.parse(request.responseText);
+        return JSON.parse(req);
     } catch (_) {
         return [];
     }
-})();
+})//();
 
 const servers = new Map();
 let currentUser = null;
@@ -32,20 +27,12 @@ function handleLoginShortcuts(event) {
     }
 }
 
-function signup() {
+async function signup() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    const req = new XMLHttpRequest();
-    req.open('POST', '/create', true);
-    req.setRequestHeader('Content-Type', 'application/json');
-    req.onload = () => {
-        if (req.readyState === 4) {
-            alert(req.responseText);
-        }
-    };
-    req.onerror = () => alert(req.responseText);
-    req.send(JSON.stringify({ username, password }));
+    const req = await request('POST', '/api/create', {}, { username, password });
+    alert(req);
 }
 
 function connect() {
@@ -199,14 +186,13 @@ function snedMeHarder(event) {
 
     if (event.keyCode === 13 && !event.shiftKey) {
         event.preventDefault();
-        if (ws !== null && ws.readyState === WebSocket.OPEN && msg.length > 0) {
-            ws.send(JSON.stringify({
-                op: 8,
-                d: {
-                    server: 1,
-                    content: msg
-                }
-            }));
+        if (msg.length > 0) {
+            request('POST', 'https://union.serux.pro/api/message', {
+                Authorization: `Basic ${btoa(_auth)}`
+            }, {
+                server: selectedServer,
+                content: msg
+            });
             elemelon.value = '';
         }
     }
@@ -301,4 +287,29 @@ function addMessage(message) { // This will come in handy later when we implemen
 
         document.getElementById('message-container').appendChild(m);
     }
+}
+
+function request(method, path, headers = {}, body = {}) {
+    return new Promise((resolve, reject) => {
+        const req = new XMLHttpRequest();
+        req.open(method, path, true);
+        req.setRequestHeader('Content-Type', 'application/json');
+
+        for (const header in headers) {
+            req.setRequestHeader(header, headers[header]);
+        }
+
+        req.onload = () => {
+            if (req.readyState === XMLHttpRequest.DONE) {
+                if (req.status === 200) {
+                    resolve(req.responseText);
+                } else {
+                    reject(req.responseText);
+                }
+            }
+        };
+
+        req.onerror = () => reject(req.responseText);
+        req.send(JSON.stringify(body));
+    });
 }
