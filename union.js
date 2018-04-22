@@ -105,7 +105,7 @@ function parseText(text) {
         }
     }
 
-    const boldInText = filtered.match(/\*\*\w+\*\*/g);
+    const boldInText = filtered.match(boldRegex);
     if(boldInText) {
         for (const bold of boldInText) {
             console.log(bold)
