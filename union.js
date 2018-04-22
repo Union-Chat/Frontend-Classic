@@ -12,7 +12,7 @@ const validEmojis = (async () => {
     } catch (_) {
         return [];
     }
-})//();
+})();
 
 const servers = new Map();
 let currentUser = null;
@@ -187,7 +187,7 @@ function snedMeHarder(event) {
     if (event.keyCode === 13 && !event.shiftKey) {
         event.preventDefault();
         if (msg.length > 0) {
-            request('POST', 'https://union.serux.pro/api/message', {
+            request('POST', '/api/message', {
                 Authorization: `Basic ${btoa(_auth)}`
             }, {
                 server: selectedServer,
