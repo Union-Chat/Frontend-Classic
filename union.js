@@ -3,23 +3,20 @@ const URLRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~
 const emojiRegex = /:\w+:/g;
 const imageRegex = /(?:([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g;
 
-const validEmojis = (async () => {
-    try {
-        const req = await request('GET', '/emojis.json')
-            .catch(() => ([]));
-
-        return JSON.parse(req);
-    } catch (_) {
-        return [];
-    }
-})();
-
+let validEmojis;
 const servers = new Map();
 let currentUser = null;
 let _auth = null;
 let ws = null;
 let selectedServer = null;
 
+
+async function onLoad() {
+    const req = await request('GET', '/emojis.json')
+        .catch(() => ([]));
+
+    validEmojis = JSON.parse(req);
+}
 
 function handleLoginShortcuts(event) {
     if (event.keyCode === 13) {
