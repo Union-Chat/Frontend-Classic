@@ -19,6 +19,16 @@ async function onLoad() {
     validEmojis = JSON.parse(req);
 }
 
+function reorderMembers() {
+    let members = document.getElementById('members');
+
+    Array.from(members.children).sort((a, b) => {
+	    if (a.children[0].className == "offline" && b.children[0].className == "online") return 1;
+	    if (a.children[0].className == "online" && b.children[0].className == "offline") return -1;
+        return 0;
+    }).forEach((a) => members.appendChild(a));
+}
+
 function handleLoginShortcuts(event) {
     if (event.keyCode === 13) {
         connect();
@@ -180,6 +190,7 @@ function handleWSMessage(message) {
                 element.getElementsByTagName('img')[0].setAttribute('class', j.d.status ? 'online' : 'offline');
             }
 
+            reorderMembers();
         }
     } catch(e) {
         console.log(e);
@@ -251,6 +262,8 @@ function switchServer(server) {
 
         members.appendChild(elemelon);
     }
+
+    reorderMembers()
 }
 
 function addMessage(message) { // This will come in handy later when we implement caching
