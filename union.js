@@ -109,7 +109,7 @@ function parseText(text) {
     while ((mention = mentionRegex.exec(filtered)) !== null) {
         servers.forEach(server => {
             if (server.members.some(m => m.id.toLowerCase() === mention[1].toLowerCase())) {
-                filtered = filtered.replace(mention[0], `<span class="mention">${mention[1]}</span>`);
+                filtered = filtered.replace(mention[0], `<span class="mention">@${mention[1]}</span>`);
             }
         });
     }
@@ -156,7 +156,7 @@ function handleWSMessage(message) {
 
             if (j.d.content.toLowerCase().includes(`{${currentUser.toLowerCase()}}`) && 'Notification' in window && !document.hasFocus()) { // Mention
                 const notif = new Notification(`${j.d.author} mentioned you!`, {
-                    body: j.d.content.replace(mentionRegex, '$1')
+                    body: j.d.content.replace(mentionRegex, '@$1')
                 });
                 notif.onclick = () => {
                     window.focus();
