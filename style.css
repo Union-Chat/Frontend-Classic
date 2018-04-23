@@ -310,3 +310,10 @@ a:hover {
     padding: 3px;
     border-radius: 5px;
 }
+
+/* Responsive */
+@media screen and (max-width: 840px) {
+    .member-list {
+        display: none;
+    }
+}
