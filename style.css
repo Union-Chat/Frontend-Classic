@@ -305,15 +305,22 @@ a:hover {
 }
 
 .mention {
-    background: rgb(70, 70, 70);
-    color: #1E90FF;
-    padding: 3px;
-    border-radius: 5px;
+  background: rgb(70, 70, 70);
+  color: #1E90FF;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+.codeblock {
+  background: rgb(45, 45, 45);
+  font-family: 'Inconsolata', monospace;
+  padding: 7px;
+  border-radius: 10px;
 }
 
 /* Responsive */
 @media screen and (max-width: 840px) {
-    .member-list {
-        display: none;
-    }
+  .member-list {
+    display: none;
+  }
 }

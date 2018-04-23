@@ -2,6 +2,7 @@
 const boldRegex = /\*\*(.*?)\*\*/g;
 const italicsRegex = /_(.*?)_/g;
 const strikethroughRegex = /~~(.*?)~~/g;
+const codeblockRegex = /```(.*?)```/g;
 
 /* Other Regex */
 const URLRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm; // eslint-disable-line
@@ -118,7 +119,7 @@ function parseText(text) {
     }
 
     while ((bold = boldRegex.exec(filtered)) !== null) {
-        filtered = filtered.replace(bold[0], `<strong>${bold[1]}</strong>`);
+        filtered = filtered.replace(bold[0], `<b>${bold[1]}</b>`);
     }
 
     while ((italics = italicsRegex.exec(filtered)) !== null) {
@@ -127,6 +128,11 @@ function parseText(text) {
 
     while ((strikeThrough = strikethroughRegex.exec(filtered)) !== null) {
         filtered = filtered.replace(strikeThrough[0], `<s>${strikeThrough[1]}</s>`);
+    }
+
+    while ((codeblock = codeblockRegex.exec(filtered)) !== null) {
+        console.log(codeblock[1])
+        filtered = filtered.replace(codeblock[0], `<xmp class="codeblock">${codeblock[1].trim()}</xmp>`); // Fully aware xmp is deprecated, TODO: Find alternative
     }
 
     while ((mention = mentionRegex.exec(filtered)) !== null) {
@@ -196,12 +202,6 @@ function handleWSMessage(message) {
                     member.online = j.d.status;
                 }
             });
-
-            /*const element = document.getElementById(`member-${j.d.id}`);
-
-            if (element) {
-                element.getElementsByTagName('img')[0].setAttribute('class', j.d.status ? 'online' : 'offline');
-            }*/
 
             if (selectedServer) {
                 const sortedMembers = servers.get(selectedServer).members.sort(reorderSort);
