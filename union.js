@@ -256,7 +256,7 @@ function switchServer(server) {
 function addMessage(message) { // This will come in handy later when we implement caching
     const messageContent = document.createElement('pre');
 
-    if (message.content.includes(`@${currentUser}`)) {
+    if (message.content.toLowerCase().includes(`{${currentUser.toLowerCase()}}`)) {
         messageContent.setAttribute('style', 'background: rgb(70, 70, 70);');
     }
 
