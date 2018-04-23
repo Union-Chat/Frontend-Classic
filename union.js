@@ -75,7 +75,6 @@ function parseText(text) {
     let filtered = text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace('\r\n', '<br>').replace(/\n/g, '<br>');
 
     const emojisInText = filtered.match(emojiRegex);
-    const biTest = filtered.match(biRegex)
     if (emojisInText) {
         for (const emoji of emojisInText) {
             const image = validEmojis.find(e => e.toLowerCase().split('.').shift() === emoji.toLowerCase().slice(1, -1));
@@ -99,41 +98,40 @@ function parseText(text) {
         }
     }
 
+    const biTest = filtered.match(biRegex);
+    const boldInText = filtered.match(boldRegex);
+    const italicsInText = filtered.match(italicsRegex);
+    const strikeInText = filtered.match(strikethroughRegex);
 
-    const boldInText = filtered.match(boldRegex)
     if (boldInText && !biTest) {
-        var text = boldRegex.exec(filtered)
+        const text = boldRegex.exec(filtered);
         for (const groups of text) {
-            var nt = groups.split("*").join("")
-            filtered = filtered.replace(groups, "<strong>" + nt + "</strong>")
+            const nt = groups.split('*').join('');
+            filtered = filtered.replace(groups, `<strong>${nt}</strong>`);
         }
-        
     }
 
-    const italicsInText = filtered.match(italicsRegex)
     if (italicsInText && !biTest) {
-        var text = italicsRegex.exec(filtered)
+        const text = italicsRegex.exec(filtered);
         for (const groups of text) {
-            var nt = groups.split("*").join("")
-            filtered = filtered.replace(groups, "<i>" + nt + "</i>")
+            const nt = groups.split('*').join(''); // todo: Make this _ instead?
+            filtered = filtered.replace(groups, `<i>${nt}</i>`);
         }
     }
 
-    const strikeInText = filtered.match(strikethroughRegex)
     if (strikeInText) {
-        var text = strikethroughRegex.exec(filtered)
+        const text = strikethroughRegex.exec(filtered);
         for (const groups of text) {
-            var nt = groups.split("~").join("")
-            filtered = filtered.replace(groups, "<s>" + nt + "</s>")
+            const nt = groups.split('~').join('');
+            filtered = filtered.replace(groups, `<s>${nt}</s>`);
         }
     }
 
-    
     if (biTest) {
-        var text = biRegex.exec(filtered)
+        const text = biRegex.exec(filtered);
         for (const groups of text) {
-            var nt = groups.split("*").join("")
-            filtered = filtered.replace(groups, "<strong><i>" + nt + "</i></strong>")
+            const nt = groups.split('*').join('');
+            filtered = filtered.replace(groups, `<strong><i>${nt}</i></strong>`);
         }
     }
 
