@@ -1,4 +1,10 @@
+/* Formatting Regex */
 const boldRegex = /(\*\*).+(\*\*)/g;
+const italicsRegex = /(\*).+(\*)/g;
+const boldItalicsRegex = /(\*\*\*).+(\*\*\*)/g;
+const strikethroughRegex = /(\~\~).+(\~\~)/g;
+
+/* Other Regex */
 const URLRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm; // eslint-disable-line
 const emojiRegex = /:\w+:/g;
 const imageRegex = /(?:([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g;
@@ -98,7 +104,7 @@ function parseText(text) {
         }
     }
 
-    const biTest = filtered.match(biRegex);
+    const biTest = filtered.match(boldItalicsRegex);
     const boldInText = filtered.match(boldRegex);
     const italicsInText = filtered.match(italicsRegex);
     const strikeInText = filtered.match(strikethroughRegex);
