@@ -1,7 +1,7 @@
 /* Formatting Regex */
 const boldRegex = /\*\*(.*?)\*\*/g;
-const italicsRegex = /\_(.*?)\_/g;
-const strikethroughRegex = /\~\~(.*?)\~\~/g;
+const italicsRegex = /_(.*?)_/g;
+const strikethroughRegex = /~~(.*?)~~/g;
 
 /* Other Regex */
 const URLRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm; // eslint-disable-line
@@ -16,32 +16,18 @@ let ws = null;
 let selectedServer = null;
 
 
-async function onLoad() {
-    const req = await request('GET', '/emojis.json')
-        .catch(() => ([]));
-
-    validEmojis = JSON.parse(req);
-}
-
 function reorderSort(a, b) {
-    if (a.children[0].className == "offline" && b.children[0].className == "online") return 1;
-    if (a.children[0].className == "online" && b.children[0].className == "offline") return -1;
-    
+    if (!a.online && b.online) return 1;
+    if (a.online && !b.online) return -1;
+
     const aUpper = a.id.toUpperCase();
     const bUpper = b.id.toUpperCase();
 
     if (aUpper < bUpper) return -1;
 
     if (aUpper > bUpper) return 1;
-    
+
     return 0;
-
-}
-
-function reorderMembers() {
-    let members = document.getElementById('members');
-
-    Array.from(members.children).sort(reorderSort).forEach((a) => members.appendChild(a));
 }
 
 function handleLoginShortcuts(event) {
@@ -211,13 +197,16 @@ function handleWSMessage(message) {
                 }
             });
 
-            const element = document.getElementById(`member-${j.d.id}`);
+            /*const element = document.getElementById(`member-${j.d.id}`);
 
             if (element) {
                 element.getElementsByTagName('img')[0].setAttribute('class', j.d.status ? 'online' : 'offline');
-            }
+            }*/
 
-            reorderMembers();
+            if (selectedServer) {
+                const sortedMembers = servers.get(selectedServer).members.sort(reorderSort);
+                displayMembers(sortedMembers);
+            }
         }
     } catch(e) {
         console.log(e);
@@ -251,32 +240,8 @@ function switchServer(server) {
     chatbox.removeAttribute('readonly');
     chatbox.setAttribute('placeholder', `Message ${name}...`);
 
-    const members = document.getElementById('members');
-
-    while(members.firstChild) {
-        members.removeChild(members.firstChild);
-    }
-
     const sortedMembers = servers.get(selectedServer).members.sort(reorderSort);
-
-    for (const member of sortedMembers) {
-        const elemelon = document.createElement('div');
-        const icon = document.createElement('img');
-        const username = document.createElement('h2');
-
-        elemelon.setAttribute('class', 'member');
-        elemelon.setAttribute('id', `member-${member.id}`);
-        icon.setAttribute('class', member.online ? 'online' : 'offline');
-        icon.setAttribute('src', member.avatarUrl || 'default_avatar.png');
-        icon.setAttribute('onerror', 'this.src = \'default_avatar.png\';');
-        username.innerText = member.id;
-
-        elemelon.appendChild(icon);
-        elemelon.appendChild(username);
-
-        members.appendChild(elemelon);
-    }
-
+    displayMembers(sortedMembers);
 }
 
 function addMessage(message) { // This will come in handy later when we implement caching
@@ -318,6 +283,32 @@ function addMessage(message) { // This will come in handy later when we implemen
         m.appendChild(container);
 
         document.getElementById('message-container').appendChild(m);
+    }
+}
+
+function displayMembers(members) {
+    const memberList = document.getElementById('members');
+
+    while (memberList.firstChild !== null) {
+        memberList.removeChild(memberList.firstChild);
+    }
+
+    for (const member of members) {
+        const elemelon = document.createElement('div');
+        const icon = document.createElement('img');
+        const username = document.createElement('h2');
+
+        elemelon.setAttribute('class', 'member');
+        elemelon.setAttribute('id', `member-${member.id}`);
+        icon.setAttribute('class', member.online ? 'online' : 'offline');
+        icon.setAttribute('src', member.avatarUrl || 'default_avatar.png');
+        icon.setAttribute('onerror', 'this.src = \'default_avatar.png\';');
+        username.innerText = member.id;
+
+        elemelon.appendChild(icon);
+        elemelon.appendChild(username);
+
+        memberList.appendChild(elemelon);
     }
 }
 
