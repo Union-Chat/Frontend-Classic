@@ -303,3 +303,10 @@ a:hover {
   background: rgb(120, 120, 120);
   cursor: pointer;
 }
+
+.mention {
+    background: rgb(70, 70, 70);
+    color: #1E90FF;
+    padding: 3px;
+    border-radius: 5px;
+}

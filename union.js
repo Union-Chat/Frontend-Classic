@@ -2,6 +2,7 @@ const boldRegex = /(\*\*).+(\*\*)/g;
 const URLRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm; // eslint-disable-line
 const emojiRegex = /:\w+:/g;
 const imageRegex = /(?:([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g;
+const mentionRegex = /\{(.+?)}/g;
 
 let validEmojis;
 const servers = new Map();
@@ -93,9 +94,9 @@ function parseText(text) {
         }
     }
 
-    const URLsInText = filtered.match(URLRegex);
-    if (URLsInText) {
-        for (const URL of URLsInText) {
+    const urlsInText = filtered.match(URLRegex);
+    if (urlsInText) {
+        for (const URL of urlsInText) {
             filtered = filtered.replace(URL, `<a target="_blank" href="${URL}">${URL}</a>`);
 
             const imageMatch = URL.match(imageRegex);
@@ -103,6 +104,14 @@ function parseText(text) {
                 filtered += `<br><img src="${imageMatch[0]}" class="embed">`;
             }
         }
+    }
+
+    while ((mention = mentionRegex.exec(filtered)) !== null) {
+        servers.forEach(server => {
+            if (server.members.some(m => m.id.toLowerCase() === mention[1].toLowerCase())) {
+                filtered = filtered.replace(mention[0], `<span class="mention">${mention[1]}</span>`);
+            }
+        });
     }
 
     return filtered;
@@ -145,9 +154,9 @@ function handleWSMessage(message) {
 
             addMessage(j.d);
 
-            if (j.d.content.includes(`@${currentUser}`) && 'Notification' in window && !document.hasFocus()) { // Mention
+            if (j.d.content.toLowerCase().includes(`{${currentUser.toLowerCase()}}`) && 'Notification' in window && !document.hasFocus()) { // Mention
                 const notif = new Notification(`${j.d.author} mentioned you!`, {
-                    body: j.d.content
+                    body: j.d.content.replace(mentionRegex, '$1')
                 });
                 notif.onclick = () => {
                     window.focus();
