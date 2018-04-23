@@ -1,10 +1,14 @@
-const boldRegex = /(\*\*).+(\*\*)/g;
+/* Formatting Regex */
+const boldRegex = /\*\*(.*?)\*\*/g;
+const italicsRegex = /\_(.*?)\_/g;
+const strikethroughRegex = /\~\~(.*?)\~\~/g;
+
+/* Other Regex */
 const URLRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm; // eslint-disable-line
 const emojiRegex = /:\w+:/g;
 const imageRegex = /(?:([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g;
 const mentionRegex = /\{(.+?)}/g;
 
-let validEmojis;
 const servers = new Map();
 let currentUser = null;
 let _auth = null;
@@ -114,6 +118,18 @@ function parseText(text) {
                 filtered += `<br><img src="${imageMatch[0]}" class="embed">`;
             }
         }
+    }
+
+    while ((bold = boldRegex.exec(filtered)) !== null) {
+        filtered = filtered.replace(bold[0], `<strong>${bold[1]}</strong>`);
+    }
+
+    while ((italics = italicsRegex.exec(filtered)) !== null) {
+        filtered = filtered.replace(italics[0], `<i>${italics[1]}</i>`);
+    }
+
+    while ((strikeThrough = strikethroughRegex.exec(filtered)) !== null) {
+        filtered = filtered.replace(strikeThrough[0], `<s>${strikeThrough[1]}</s>`);
     }
 
     while ((mention = mentionRegex.exec(filtered)) !== null) {
