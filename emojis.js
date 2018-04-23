@@ -1,4 +1,4 @@
-[
+const validEmojis = [
   "100.svg",
   "1234.svg",
   "8ball.svg",

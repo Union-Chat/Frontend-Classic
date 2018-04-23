@@ -4,20 +4,12 @@ const emojiRegex = /:\w+:/g;
 const imageRegex = /(?:([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g;
 const mentionRegex = /\{(.+?)}/g;
 
-let validEmojis;
 const servers = new Map();
 let currentUser = null;
 let _auth = null;
 let ws = null;
 let selectedServer = null;
 
-
-async function onLoad() {
-    const req = await request('GET', '/emojis.json')
-        .catch(() => ([]));
-
-    validEmojis = JSON.parse(req);
-}
 
 function handleLoginShortcuts(event) {
     if (event.keyCode === 13) {
