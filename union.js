@@ -1,7 +1,6 @@
 /* Formatting Regex */
 const boldRegex = /\*\*(.*?)\*\*/g;
-const italicsRegex = /\*(.*?)\*/g;
-const boldItalicsRegex = /\*\*\*(.*?)\*\*\*/g;
+const italicsRegex = /\_(.*?)\_/g;
 const strikethroughRegex = /\~\~(.*?)\~\~/g;
 
 /* Other Regex */
@@ -104,41 +103,16 @@ function parseText(text) {
         }
     }
 
-    const biTest = filtered.match(boldItalicsRegex);
-    const boldInText = filtered.match(boldRegex);
-    const italicsInText = filtered.match(italicsRegex);
-    const strikeInText = filtered.match(strikethroughRegex);
-
-    if (boldInText && !biTest) {
-        const text = boldRegex.exec(filtered);
-        for (const groups of text) {
-            const nt = groups.split('*').join('');
-            filtered = filtered.replace(groups, `<strong>${nt}</strong>`);
-        }
+    while ((bold = boldRegex.exec(filtered)) !== null) {
+        filtered = filtered.replace(bold[0], `<strong>${bold[1]}</strong>`);
     }
 
-    if (italicsInText && !biTest) {
-        const text = italicsRegex.exec(filtered);
-        for (const groups of text) {
-            const nt = groups.split('*').join(''); // todo: Make this _ instead?
-            filtered = filtered.replace(groups, `<i>${nt}</i>`);
-        }
+    while ((italics = italicsRegex.exec(filtered)) !== null) {
+        filtered = filtered.replace(italics[0], `<i>${italics[1]}</i>`);
     }
 
-    if (strikeInText) {
-        const text = strikethroughRegex.exec(filtered);
-        for (const groups of text) {
-            const nt = groups.split('~').join('');
-            filtered = filtered.replace(groups, `<s>${nt}</s>`);
-        }
-    }
-
-    if (biTest) {
-        const text = biRegex.exec(filtered);
-        for (const groups of text) {
-            const nt = groups.split('*').join('');
-            filtered = filtered.replace(groups, `<strong><i>${nt}</i></strong>`);
-        }
+    while ((strikeThrough = strikethroughRegex.exec(filtered)) !== null) {
+        filtered = filtered.replace(strikeThrough[0], `<s>${strikeThrough[1]}</s>`);
     }
 
     while ((mention = mentionRegex.exec(filtered)) !== null) {
