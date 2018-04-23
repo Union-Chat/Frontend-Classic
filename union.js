@@ -19,14 +19,25 @@ async function onLoad() {
     validEmojis = JSON.parse(req);
 }
 
+function reorderSort(a, b) {
+    if (a.children[0].className == "offline" && b.children[0].className == "online") return 1;
+    if (a.children[0].className == "online" && b.children[0].className == "offline") return -1;
+    
+    const aUpper = a.id.toUpperCase();
+    const bUpper = b.id.toUpperCase();
+
+    if (aUpper < bUpper) return -1;
+
+    if (aUpper > bUpper) return 1;
+    
+    return 0;
+
+}
+
 function reorderMembers() {
     let members = document.getElementById('members');
 
-    Array.from(members.children).sort((a, b) => {
-	    if (a.children[0].className == "offline" && b.children[0].className == "online") return 1;
-	    if (a.children[0].className == "online" && b.children[0].className == "offline") return -1;
-        return 0;
-    }).forEach((a) => members.appendChild(a));
+    Array.from(members.children).sort(reorderSort).forEach((a) => members.appendChild(a));
 }
 
 function handleLoginShortcuts(event) {
@@ -230,20 +241,7 @@ function switchServer(server) {
         members.removeChild(members.firstChild);
     }
 
-    const sortedMembers = servers.get(selectedServer).members.sort((a, b) => {
-        const aLower = a.id.toUpperCase();
-        const bLower = b.id.toUpperCase();
-
-        if (aLower < bLower) {
-            return -1;
-        }
-
-        if (aLower > bLower) {
-            return 1;
-        }
-
-        return 0;
-    });
+    const sortedMembers = servers.get(selectedServer).members.sort(reorderSort);
 
     for (const member of sortedMembers) {
         const elemelon = document.createElement('div');
@@ -263,7 +261,6 @@ function switchServer(server) {
         members.appendChild(elemelon);
     }
 
-    reorderMembers()
 }
 
 function addMessage(message) { // This will come in handy later when we implement caching
