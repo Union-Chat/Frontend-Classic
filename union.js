@@ -1,8 +1,8 @@
 /* Formatting Regex */
-const boldRegex = /(?<!\\)\*\*(.*?)\*\*/g;
-const italicsRegex = /(?<!\\)_(.*?)_/g;
-const strikethroughRegex = /(?<!\\)~~(.*?)~~/g;
-const codeblockRegex = /(?<!\\)```(.*?)```/g;
+const boldRegex = /\*\*(.*?)\*\*/g;
+const italicsRegex = /_(.*?)_/g;
+const strikethroughRegex = /~~(.*?)~~/g;
+const codeblockRegex = /```(.*?)```/g; // TODO: ESCAPE SEQUENCE NEEDS FIXING
 const escapeRegex = /\\(\*|_|~\`)/g;
 
 /* Other Regex */
@@ -132,8 +132,7 @@ function parseText(text) {
     }
 
     while ((codeblock = codeblockRegex.exec(filtered)) !== null) {
-        console.log(codeblock[1])
-        filtered = filtered.replace(codeblock[0], `<xmp class="codeblock">${codeblock[1].trim()}</xmp>`); // Fully aware xmp is deprecated, TODO: Find alternative
+        filtered = filtered.replace(codeblock[0], `<pre class="codeblock">${codeblock[1].trim()}</pre>`);
     }
 
     while ((mention = mentionRegex.exec(filtered)) !== null) {
