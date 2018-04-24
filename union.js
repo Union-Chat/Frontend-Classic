@@ -1,9 +1,9 @@
 /* Formatting Regex */
-const boldRegex = /\*\*(.*?)\*\*/g;
-const italicsRegex = /_(.*?)_/g;
-const strikethroughRegex = /~~(.*?)~~/g;
-const codeblockRegex = /```(.*?)```/g; // TODO: ESCAPE SEQUENCE NEEDS FIXING
-const escapeRegex = /\\(\*|_|~\`)/g;
+const boldRegex = new RegExp('(?<!\\\\)\\*\\*(.*?)\\*\\*', 'g');
+const italicsRegex = new RegExp('(?<!\\\\)\\*(.*?)\\*', 'g');
+const strikethroughRegex = new RegExp('(?<!\\\\)\\~\\~(.*?)\\~\\~', 'g');
+const codeblockRegex = new RegExp('(?<!\\\\)\\`\\`\\`(.*?)\\`\\`\\`', 'g');
+const escapeRegex = /\\(\*|_|~|`)/g;
 
 /* Other Regex */
 const URLRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm; // eslint-disable-line
@@ -120,18 +120,30 @@ function parseText(text) {
     }
 
     while ((bold = boldRegex.exec(filtered)) !== null) {
+        if (bold[1].length === 0) continue;
         filtered = filtered.replace(bold[0], `<b>${bold[1]}</b>`);
     }
 
     while ((italics = italicsRegex.exec(filtered)) !== null) {
+        if (italics[1].length === 0) continue;
         filtered = filtered.replace(italics[0], `<i>${italics[1]}</i>`);
     }
 
     while ((strikeThrough = strikethroughRegex.exec(filtered)) !== null) {
+        if (strikeThrough[1].length === 0) continue;
         filtered = filtered.replace(strikeThrough[0], `<s>${strikeThrough[1]}</s>`);
     }
 
     while ((codeblock = codeblockRegex.exec(filtered)) !== null) {
+        if (codeblock[1].startsWith('<br>')) {
+            codeblock[1] = codeblock[1].slice(4);
+        }
+
+        if (codeblock[1].endsWith('<br>')) {
+            codeblock[1] = codeblock[1].slice(0, codeblock[1].length - 4);
+        }
+
+        if (codeblock[1].length === 0) continue;
         filtered = filtered.replace(codeblock[0], `<pre class="codeblock">${codeblock[1].trim()}</pre>`);
     }
 
@@ -144,6 +156,7 @@ function parseText(text) {
     }
 
     filtered = filtered.replace(escapeRegex, '$1'); // Hides backslash (escape character)
+    console.log(filtered);
 
     return filtered;
 }
