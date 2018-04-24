@@ -156,7 +156,6 @@ function parseText(text) {
     }
 
     filtered = filtered.replace(escapeRegex, '$1'); // Hides backslash (escape character)
-    console.log(filtered);
 
     return filtered;
 }
