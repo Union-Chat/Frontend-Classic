@@ -1,8 +1,8 @@
 /* Formatting Regex */
-const boldRegex = /\*\*(.*?)\*\*/g;
-const italicsRegex = /_(.*?)_/g;
-const strikethroughRegex = /~~(.*?)~~/g;
-const codeblockRegex = /```(.*?)```/g;
+const boldRegex = /(?<!\\)\*\*(.*?)\*\*/g;
+const italicsRegex = /(?<!\\)_(.*?)_/g;
+const strikethroughRegex = /(?<!\\)~~(.*?)~~/g;
+const codeblockRegex = /(?<!\\)```(.*?)```/g;
 
 /* Other Regex */
 const URLRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm; // eslint-disable-line
