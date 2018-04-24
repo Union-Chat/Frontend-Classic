@@ -1,8 +1,8 @@
 /* Formatting Regex */
-const boldRegex = new RegExp('(?<!\\\\)\\*\\*(.*?)\\*\\*', 'g');
-const italicsRegex = new RegExp('(?<!\\\\)\\*(.*?)\\*', 'g');
-const strikethroughRegex = new RegExp('(?<!\\\\)\\~\\~(.*?)\\~\\~', 'g');
-const codeblockRegex = new RegExp('(?<!\\\\)\\`\\`\\`(.*?)\\`\\`\\`', 'g');
+const boldRegex = new RegExp('(?!\\\\)\\*\\*(.*?)\\*\\*', 'g');
+const italicsRegex = new RegExp('(?!\\\\)\\*(.*?)\\*', 'g');
+const strikethroughRegex = new RegExp('(?!\\\\)\\~\\~(.*?)\\~\\~', 'g');
+const codeblockRegex = new RegExp('(?!\\\\)\\`\\`\\`(.*?)\\`\\`\\`', 'g');
 const escapeRegex = /\\(\*|_|~|`)/g;
 
 /* Other Regex */
