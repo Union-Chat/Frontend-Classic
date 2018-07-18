@@ -72,7 +72,7 @@ function handleWSClose(close) {
 
     const serverList = document.getElementById('servers');
 
-    while(serverList.lastChild && serverList.lastElementChild.id !== 'serverOptions') {
+    while(serverList.lastChild) {
         serverList.removeChild(serverList.lastChild);
     }
 
@@ -327,6 +327,16 @@ function displayMembers(members) {
 
         memberList.appendChild(elemelon);
     }
+}
+
+function showServerModal() {
+  const modal = document.getElementById('s-modal');
+
+  if (modal.style.visibility === 'visible') {
+    modal.style.visibility = 'hidden';
+  } else {
+    modal.style.visibility = 'visible';
+  }
 }
 
 function request(method, path, headers = {}, body = {}) {
