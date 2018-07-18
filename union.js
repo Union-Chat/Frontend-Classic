@@ -55,26 +55,29 @@ function connect() {
 }
 
 function authenticateClient() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    _auth = `${username}:${password}`;
-    currentUser = username;
+    if (_auth !== null) {
+        currentUser = atob(_auth).split(':')[0];
+    } else {
+        const [username, password] = ['username', 'password'].map(id => document.getElementById(id).value);
+        _auth = btoa(`${username}:${password}`);
+        currentUser = username;
+    }
 
-    const b64 = btoa(_auth); // Encode to base64
-    ws.send(`Basic ${b64}`);
+    ws.send(`Basic ${_auth}`);
 }
 
 function handleWSClose(close) {
     console.log(`Websocket disconnected (${close.code}): ${close.reason}`);
+    currentUser = null;
 
     const serverList = document.getElementById('servers');
 
-    while(serverList.firstChild) {
-        serverList.removeChild(serverList.firstChild);
+    while(serverList.lastChild && serverList.lastElementChild.id !== 'serverOptions') {
+        serverList.removeChild(serverList.lastChild);
     }
 
     if (close.code !== 4001) {
-        setTimeout(() => connect(_auth), 3e3); // try to reconnect
+        setTimeout(connect, 3e3); // try to reconnect
     } else {
         const messages = document.getElementById('message-container');
 
@@ -163,7 +166,7 @@ function parseText(text) {
 function handleWSMessage(message) {
     try {
         const j = JSON.parse(message.data);
-        console.log('Got WS message', j);
+        console.log('WS message received', j);
 
         if (j.op === 1) {
             if ('Notification' in window && Notification.permission === 'default') {
@@ -186,7 +189,7 @@ function handleWSMessage(message) {
 
                 s.appendChild(icon);
 
-                document.getElementById('servers').appendChild(s);
+                document.getElementById('servers').prepend(s);
             });
         }
 

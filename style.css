@@ -15,6 +15,9 @@ body {
   height: 100%;
   width: 60px;
   background: rgb(50, 50, 50);
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .member-list {
@@ -165,9 +168,6 @@ img.embed {
 }
 
 .server {
-  padding-top: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
   cursor: pointer;
 }
 
@@ -175,6 +175,15 @@ img.embed {
   width: 50px;
   height: auto;
   border-radius: 100%;
+}
+
+.add-server {
+  width: 50px;
+  height: auto;
+  border-radius: 100%;
+  object-fit: none;
+  cursor: pointer;
+  z-index: 99;
 }
 
 .chatbox {
