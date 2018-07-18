@@ -41,7 +41,7 @@ body {
   margin-left: 3px;
   height: 30px;
   width: 30px;
-  object-fit: contain;
+  object-fit: cover;
   border-radius: 100%;
 }
 
