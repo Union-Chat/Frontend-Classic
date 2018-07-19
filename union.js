@@ -250,9 +250,14 @@ function snedMeHarder(event) {
 
 function switchServer(server) {
     const chatbox = document.getElementById('whatthefuckdidyoujustsayaboutme');
-    const id = server.getAttribute('server-id');
+    const id = Number(server.getAttribute('server-id'));
     const name = server.getAttribute('server-name');
-    selectedServer = Number(id);
+
+    if (selectedServer === id) {
+        return;
+    }
+
+    selectedServer = id;
 
     chatbox.removeAttribute('readonly');
     chatbox.setAttribute('placeholder', `Message ${name}...`);
