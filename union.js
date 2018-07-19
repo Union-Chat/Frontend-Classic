@@ -259,6 +259,12 @@ function switchServer(server) {
 
     const sortedMembers = servers.get(selectedServer).members.sort(reorderSort);
     displayMembers(sortedMembers);
+
+    const messages = document.getElementById('message-container');
+
+    while(messages.firstChild) {
+      messages.removeChild(messages.firstChild);
+    }
 }
 
 function addMessage(message) { // This will come in handy later when we implement caching
