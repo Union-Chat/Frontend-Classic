@@ -28,6 +28,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  padding-top: 15px;
 }
 
 .member {
@@ -39,6 +40,7 @@ body {
   margin-top: 10px;
   margin-bottom: 30px;
   padding-left: 10px;
+  align-items: center;
 }
 
 .member img {
@@ -57,7 +59,6 @@ body {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  margin-top: 45px;
 }
 
 .offline {
