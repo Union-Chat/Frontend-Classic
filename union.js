@@ -238,7 +238,7 @@ function snedMeHarder(event) {
         event.preventDefault();
         if (msg.length > 0) {
             request('POST', '/api/message', {
-                Authorization: `Basic ${btoa(_auth)}`
+                Authorization: `Basic ${_auth}`
             }, {
                 server: selectedServer,
                 content: msg
