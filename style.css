@@ -9,6 +9,7 @@ body {
   flex-wrap: nowrap;
   height: 100%;
   width: 100%;
+  overflow-y: hidden;
 }
 
 .server-list {
@@ -366,4 +367,14 @@ a:hover {
   .member-list {
     display: none;
   }
+}
+
+/* Scrollbear */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #636363; 
+  border-radius: 10px;
 }
