@@ -25,20 +25,17 @@ body {
   height: 100%;
   width: 250px;
   background: rgb(50, 50, 50);
-  display: flex;
-  flex-direction: column;
   overflow-x: hidden;
 }
 
 .member {
   width: 95%;
-  height: 30px;
+  height: auto;
   color: white;
   display: flex;
   flex-direction: row;
-  margin-top: 10px;
-  margin-bottom: 30px;
   padding-left: 10px;
+  align-items: center;
 }
 
 .member img {
