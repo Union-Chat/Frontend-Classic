@@ -26,6 +26,7 @@ body {
   width: 250px;
   background: rgb(50, 50, 50);
   overflow-x: hidden;
+  padding-top: 15px;
 }
 
 .member {
@@ -54,7 +55,6 @@ body {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  margin-top: 45px;
 }
 
 .offline {
