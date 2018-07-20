@@ -272,9 +272,9 @@ function snedMeHarder (event) {
   }
 }
 
-function scrollToBottom() {
+function scrollToBottom () {
   const container = document.getElementById('message-container');
-  const shouldScroll = container.scrollTop > (container.scrollHeight - container.offsetHeight) - 100;
+  const shouldScroll = container.scrollTop > container.scrollHeight - container.offsetHeight * 1.5;
 
   if (shouldScroll) {
     container.scrollTop = container.scrollHeight;
