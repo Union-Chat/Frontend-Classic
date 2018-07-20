@@ -392,8 +392,9 @@ function createServer () {
   }
 
   const iconUrl = prompt('Server icon (url)?', 'default_avatar.png');
+  consoel.log(serverName, iconUrl); 
 
-  request('POST', '/api/createServer', {
+  request('POST', '/api/serverCreate', {
     Authorization: `Basic ${_auth}`
   }, {
     name: serverName,
