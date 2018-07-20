@@ -274,11 +274,11 @@ function snedMeHarder (event) {
 
 function scrollToBottom () {
   const container = document.getElementById('message-container');
-  const shouldScroll = container.scrollTop > container.scrollHeight - container.offsetHeight * 1.5;
+  //const shouldScroll = container.scrollTop > (container.scrollHeight - container.offsetHeight); // TODO: FIND OPTIMAL VALUES
 
-  if (shouldScroll) {
-    container.scrollTop = container.scrollHeight;
-  }
+  //if (shouldScroll) {
+  container.scrollTop = container.scrollHeight;
+  //}
 }
 
 function switchServer (server) {
