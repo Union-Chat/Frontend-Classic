@@ -318,7 +318,7 @@ function addServer (server) {
 }
 
 function addMessage (message) { // This will come in handy later when we implement caching
-  servers.get(message.server).messages.add(message.id, message);
+  servers.get(message.server).messages.set(message.id, message);
 
   const messageContent = document.createElement('pre');
 
