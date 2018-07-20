@@ -184,7 +184,7 @@ function handleWSMessage (message) {
     const j = JSON.parse(message.data);
     console.log('WS message received', j);
 
-    if (j.op === 1) { // hello
+    if (j.op === INBOUND_OPCODES.Hello) { // hello
       if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission();
       }
@@ -201,7 +201,7 @@ function handleWSMessage (message) {
       document.getElementById('servers').appendChild(add);
     }
 
-    if (j.op === 3) { // message
+    if (j.op === INBOUND_OPCODES.Message) { // message
       if (j.d.server !== selectedServer) {
         return;
       }
@@ -221,7 +221,7 @@ function handleWSMessage (message) {
       const container = document.getElementById('message-container');
       container.scrollTop = container.scrollHeight;
 
-    } else if (j.op === 4) { // presence update
+    } else if (j.op === INBOUND_OPCODES.PresenceUpdate) { // presence update
       servers.forEach(server => {
         const member = server.members.find(m => m.id === j.d.id);
         if (member) {
@@ -234,10 +234,20 @@ function handleWSMessage (message) {
         displayMembers(sortedMembers);
       }
 
-    } else if (j.op === 2) { // member add
-
-    } else if (j.op === 5) { // server join
+    } else if (j.op === INBOUND_OPCODES.MemberAdd) { // member add
+      // This isn't dispatched by the server yet
+    } else if (j.op === INBOUND_OPCODES.ServerJoin) { // server join
       addServer(j.d);
+    } else if (j.op === INBOUND_OPCODES.ServerLeave) {
+      if (servers.has(j.d)) {
+        servers.delete(j.d);
+      }
+
+      const s = document.getElementById(j.d);
+
+      if (s) {
+        s.parentElement.removeChild(s);
+      }
     }
 
 
@@ -266,7 +276,7 @@ function snedMeHarder (event) {
 
 function switchServer (server) {
   const chatbox = document.getElementById('whatthefuckdidyoujustsayaboutme');
-  const id = Number(server.getAttribute('server-id'));
+  const id = Number(server.id);
   const name = server.getAttribute('server-name');
 
   if (selectedServer === id) {
@@ -292,7 +302,7 @@ function addServer (server) {
   servers.set(server.id, server);
   const s = document.createElement('div');
   s.setAttribute('class', 'server');
-  s.setAttribute('server-id', server.id);
+  s.setAttribute('id', server.id);
   s.setAttribute('server-name', server.name);
   s.addEventListener('click', () => switchServer(s));
 
@@ -427,3 +437,21 @@ function request (method, path, headers = {}, body = {}) {
     req.send(JSON.stringify(body));
   });
 }
+
+
+const INBOUND_OPCODES = {
+  'Hello': 1,          // initial connection
+  'MemberAdd': 2,      // member joined server
+  'Message': 3,        // received message
+  'PresenceUpdate': 4, // member presence update
+  'ServerJoin': 5,     // self joined server
+  'ServerLeave': 6,    // self left server
+  'MemberChunk': 7,    // received chunk of server members
+  'DeleteMessage': 8   // message deleted
+};
+
+const OUTBOUND_OPCODES = {
+  'RequestMemberChunk': 9,
+  'SendMessage': 10,
+  'JoinServer': 11 // Should this be REST?
+};
