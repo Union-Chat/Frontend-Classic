@@ -404,7 +404,6 @@ function createServer () {
 }
 
 function request (method, path, headers = {}, body = {}) {
-  console.log('i ship this');
   return new Promise((resolve, reject) => {
     const req = new XMLHttpRequest();
     req.open(method, path, true);
