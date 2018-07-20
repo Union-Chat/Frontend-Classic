@@ -218,8 +218,7 @@ function handleWSMessage (message) {
         };
       }
 
-      const container = document.getElementById('message-container');
-      container.scrollTop = container.scrollHeight;
+      scrollToBottom();
 
     } else if (j.op === INBOUND_OPCODES.PresenceUpdate) { // presence update
       servers.forEach(server => {
@@ -273,6 +272,15 @@ function snedMeHarder (event) {
   }
 }
 
+function scrollToBottom() {
+  const container = document.getElementById('message-container');
+  const isAtBottom = container.scrollTop === (container.scrollHeight - container.offsetHeight);
+
+  if (isAtBottom) {
+    container.scrollTop = container.scrollHeight;
+  }
+}
+
 function switchServer (server) {
   const chatbox = document.getElementById('whatthefuckdidyoujustsayaboutme');
   const id = Number(server.id);
@@ -299,6 +307,8 @@ function switchServer (server) {
   for (const m of servers.get(id).messages.values()) {
     addMessage(m);
   }
+
+  scrollToBottom();
 }
 
 function addServer (server) {
