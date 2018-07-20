@@ -295,10 +295,14 @@ function switchServer (server) {
   while(messages.firstChild) {
     messages.removeChild(messages.firstChild);
   }
+
+  servers.get(id).messages.values().forEach(addMessage);
 }
 
 function addServer (server) {
+  server.messages = new Map();
   servers.set(server.id, server);
+
   const s = document.createElement('div');
   s.setAttribute('class', 'server');
   s.setAttribute('id', server.id);
@@ -314,6 +318,8 @@ function addServer (server) {
 }
 
 function addMessage (message) { // This will come in handy later when we implement caching
+  servers.get(message.server).messages.add(message.id, message);
+
   const messageContent = document.createElement('pre');
 
   if (message.content.toLowerCase().includes(`{${currentUser.toLowerCase()}}`)) {
