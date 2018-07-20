@@ -296,7 +296,9 @@ function switchServer (server) {
     messages.removeChild(messages.firstChild);
   }
 
-  servers.get(id).messages.values().forEach(addMessage);
+  for (const m of servers.get(id).messages.values()) {
+    addMessage(m);
+  }
 }
 
 function addServer (server) {
