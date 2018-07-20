@@ -125,7 +125,7 @@ function parseText (text) {
 
       const imageMatch = URL.match(imageRegex);
       if (imageMatch) {
-        filtered += `<br><img src="${imageMatch[0]}" class="embed">`;
+        filtered += `<br><img src="${imageMatch[0]}" class="embed" onload="scrollToBottom()">`;
       }
     }
   }
