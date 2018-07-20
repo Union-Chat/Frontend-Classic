@@ -181,7 +181,6 @@ img.embed {
   border-radius: 100%;
   object-fit: none;
   cursor: pointer;
-  z-index: 99;
 }
 
 .chatbox {
