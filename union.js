@@ -168,7 +168,7 @@ function handleWSMessage(message) {
         const j = JSON.parse(message.data);
         console.log('WS message received', j);
 
-        if (j.op === 1) {
+        if (j.op === 1) { // hello
             if ('Notification' in window && Notification.permission === 'default') {
                 Notification.requestPermission();
             }
@@ -176,24 +176,10 @@ function handleWSMessage(message) {
             const chatbox = document.getElementById('whatthefuckdidyoujustsayaboutme');
             chatbox.addEventListener('keydown', snedMeHarder);
 
-            j.d.forEach(server => {
-                servers.set(server.id, server);
-                const s = document.createElement('div');
-                s.setAttribute('class', 'server');
-                s.setAttribute('server-id', server.id);
-                s.setAttribute('server-name', server.name);
-                s.addEventListener('click', () => switchServer(s));
-
-                const icon = document.createElement('img');
-                icon.setAttribute('src', server.iconUrl);
-
-                s.appendChild(icon);
-
-                document.getElementById('servers').prepend(s);
-            });
+            j.d.forEach(addServer);
         }
 
-        if (j.op === 3) {
+        if (j.op === 3) { // message
             if (j.d.server !== selectedServer) {
                 return;
             }
@@ -212,7 +198,8 @@ function handleWSMessage(message) {
 
             const container = document.getElementById('message-container');
             container.scrollTop = container.scrollHeight;
-        } else if (j.op === 4) {
+
+        } else if (j.op === 4) { // presence update
             servers.forEach(server => {
                 const member = server.members.find(m => m.id === j.d.id);
                 if (member) {
@@ -224,7 +211,14 @@ function handleWSMessage(message) {
                 const sortedMembers = servers.get(selectedServer).members.sort(reorderSort);
                 displayMembers(sortedMembers);
             }
+
+        } else if (j.op === 2) { // member add
+
+        } else if (j.op === 5) { // server join
+            addServer(j.d);
         }
+
+        
     } catch(e) {
         console.log(e);
     }
@@ -270,6 +264,22 @@ function switchServer(server) {
     while(messages.firstChild) {
       messages.removeChild(messages.firstChild);
     }
+}
+
+function addServer(server) {
+    servers.set(server.id, server);
+    const s = document.createElement('div');
+    s.setAttribute('class', 'server');
+    s.setAttribute('server-id', server.id);
+    s.setAttribute('server-name', server.name);
+    s.addEventListener('click', () => switchServer(s));
+
+    const icon = document.createElement('img');
+    icon.setAttribute('src', server.iconUrl);
+
+    s.appendChild(icon);
+
+    document.getElementById('servers').prepend(s);
 }
 
 function addMessage(message) { // This will come in handy later when we implement caching
