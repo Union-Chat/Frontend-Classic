@@ -313,6 +313,7 @@ function addServer (server) {
 
   const icon = document.createElement('img');
   icon.setAttribute('src', server.iconUrl);
+  icon.setAttribute('onerror', 'this.src = \'default_avatar.png\';');
 
   s.appendChild(icon);
 
