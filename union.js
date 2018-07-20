@@ -413,6 +413,8 @@ function createServer () {
 }
 
 function request (method, path, headers = {}, body = {}) {
+  console.log(`Sending request\n\tMethod: ${method}\n\tRoute: ${path}\n\tHeaders: ${headers}\n\tBody: ${body}`);
+
   return new Promise((resolve, reject) => {
     const req = new XMLHttpRequest();
     req.open(method, path, true);
