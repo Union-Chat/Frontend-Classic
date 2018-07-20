@@ -252,7 +252,7 @@ function snedMeHarder (event) {
 
   if (event.keyCode === 13 && !event.shiftKey) {
     event.preventDefault();
-    if (msg.length > 0) {
+    if (msg.trim().length > 0) {
       request('POST', '/api/message', {
         Authorization: `Basic ${_auth}`
       }, {
@@ -396,7 +396,7 @@ function createServer () {
   request('POST', '/api/createServer', {
     Authorization: `Basic ${_auth}`
   }, {
-    name,
+    name: serverName,
     iconUrl
   });
 
