@@ -263,10 +263,9 @@ function snedMeHarder (event) {
   if (event.keyCode === 13 && !event.shiftKey) {
     event.preventDefault();
     if (msg.trim().length > 0) {
-      request('POST', '/api/message', {
+      request('POST', `/api/server/${selectedServer}/messages`, {
         Authorization: `Basic ${_auth}`
       }, {
-        server: selectedServer,
         content: msg
       });
       elemelon.value = '';
@@ -403,7 +402,7 @@ function createServer () {
 
   const iconUrl = prompt('Server icon (url)?', 'default_avatar.png');
 
-  request('POST', '/api/createServer', {
+  request('POST', '/api/server', {
     Authorization: `Basic ${_auth}`
   }, {
     name: serverName,
