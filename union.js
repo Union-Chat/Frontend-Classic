@@ -134,6 +134,7 @@ function parseText (text) {
     if (bold[1].length === 0) {
       continue;
     }
+    console.log(bold[0], bold[1]);
     filtered = filtered.replace(bold[0], `<b>${bold[1]}</b>`);
   }
 
@@ -163,8 +164,11 @@ function parseText (text) {
     if (codeblock[1].length === 0) {
       continue;
     }
+    console.log(codeblock[0], codeblock[1]);
     filtered = filtered.replace(codeblock[0], `<pre class="codeblock">${codeblock[1].trim()}</pre>`);
   }
+
+  console.log(filtered);
 
   while ((mention = mentionRegex.exec(filtered)) !== null) {
     servers.forEach(server => {
