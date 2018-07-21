@@ -234,7 +234,12 @@ function handleWSMessage (message) {
       }
 
     } else if (j.op === INBOUND_OPCODES.MemberAdd) { // member add
-      // This isn't dispatched by the server yet
+      servers.get(j.d.server).members.push(j.d.member);
+
+      if (selectedServer === j.d.server) {
+        const sortedMembers = servers.get(j.d.server).members.sort(reorderSort);
+        displayMembers(sortedMembers);
+      }
     } else if (j.op === INBOUND_OPCODES.ServerJoin) { // server join
       addServer(j.d);
     } else if (j.op === INBOUND_OPCODES.ServerLeave) {
@@ -426,6 +431,22 @@ function createServer () {
   }, {
     name: serverName,
     iconUrl
+  });
+
+  modal.style.visibility = 'hidden';
+}
+
+function joinServer () {
+  const modal = document.getElementById('s-modal');
+  const inviteCode = prompt('Enter invite code');
+
+  if (!inviteCode) {
+    modal.style.visibility = 'hidden';
+    return;
+  }
+
+  request('POST', `/api/invites/${inviteCode}`, {
+    Authorization: `Basic ${_auth}`
   });
 
   modal.style.visibility = 'hidden';
