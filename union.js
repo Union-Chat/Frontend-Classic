@@ -1,8 +1,8 @@
 /* Formatting Regex */
-const boldRegex = new RegExp('(?:(?!\\\\).|^)\\*\\*(.*?)\\*\\*', 'g');
-const italicsRegex = new RegExp('(?:(?!\\\\).|^)\\*(.*?)\\*', 'g');
-const strikethroughRegex = new RegExp('(?:(?!\\\\).|^)\\~\\~(.*?)\\~\\~', 'g');
-const codeblockRegex = new RegExp('(?:(?!\\\\).|^)\\`\\`\\`(.*?)\\`\\`\\`', 'g');
+const boldRegex = new RegExp('(?:(?!\\\\).|^)(\\*\\*(.*?)\\*\\*)', 'g');
+const italicsRegex = new RegExp('(?:(?!\\\\).|^)(\\*(.*?)\\*)', 'g');
+const strikethroughRegex = new RegExp('(?:(?!\\\\).|^)(\\~\\~(.*?)\\~\\~)', 'g');
+const codeblockRegex = new RegExp('(?:(?!\\\\).|^)(\\`\\`\\`(.*?)\\`\\`\\`)', 'g');
 const escapeRegex = /\\(\*|_|~|`)/g;
 
 /* Other Regex */
@@ -131,44 +131,40 @@ function parseText (text) {
   }
 
   while ((bold = boldRegex.exec(filtered)) !== null) {
-    if (bold[1].length === 0) {
+    if (bold[2].length === 0) {
       continue;
     }
-    console.log(bold[0], bold[1]);
-    filtered = filtered.replace(bold[0], `<b>${bold[1]}</b>`);
+    filtered = filtered.replace(bold[1], `<b>${bold[2]}</b>`);
   }
 
   while ((italics = italicsRegex.exec(filtered)) !== null) {
-    if (italics[1].length === 0) {
+    if (italics[2].length === 0) {
       continue;
     }
-    filtered = filtered.replace(italics[0], `<i>${italics[1]}</i>`);
+    filtered = filtered.replace(italics[1], `<i>${italics[2]}</i>`);
   }
 
   while ((strikeThrough = strikethroughRegex.exec(filtered)) !== null) {
-    if (strikeThrough[1].length === 0) {
+    if (strikeThrough[2].length === 0) {
       continue;
     }
-    filtered = filtered.replace(strikeThrough[0], `<s>${strikeThrough[1]}</s>`);
+    filtered = filtered.replace(strikeThrough[1], `<s>${strikeThrough[2]}</s>`);
   }
 
   while ((codeblock = codeblockRegex.exec(filtered)) !== null) {
-    if (codeblock[1].startsWith('<br>')) {
-      codeblock[1] = codeblock[1].slice(4);
+    if (codeblock[2].startsWith('<br>')) {
+      codeblock[2] = codeblock[2].slice(4);
     }
 
-    if (codeblock[1].endsWith('<br>')) {
-      codeblock[1] = codeblock[1].slice(0, codeblock[1].length - 4);
+    if (codeblock[2].endsWith('<br>')) {
+      codeblock[2] = codeblock[2].slice(0, codeblock[2].length - 4);
     }
 
-    if (codeblock[1].length === 0) {
+    if (codeblock[2].length === 0) {
       continue;
     }
-    console.log(codeblock[0], codeblock[1]);
-    filtered = filtered.replace(codeblock[0], `<pre class="codeblock">${codeblock[1].trim()}</pre>`);
+    filtered = filtered.replace(codeblock[1], `<pre class="codeblock">${codeblock[2].trim()}</pre>`);
   }
-
-  console.log(filtered);
 
   while ((mention = mentionRegex.exec(filtered)) !== null) {
     servers.forEach(server => {
