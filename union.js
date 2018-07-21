@@ -206,10 +206,6 @@ function handleWSMessage (message) {
     }
 
     if (j.op === INBOUND_OPCODES.Message) { // message
-      if (j.d.server !== selectedServer) {
-        return;
-      }
-
       addMessage(j.d);
 
       if (j.d.content.toLowerCase().includes(`{${currentUser.toLowerCase()}}`) && 'Notification' in window && !document.hasFocus()) { // Mention
@@ -221,8 +217,6 @@ function handleWSMessage (message) {
           notif.close();
         };
       }
-
-      scrollToBottom();
 
     } else if (j.op === INBOUND_OPCODES.PresenceUpdate) { // presence update
       servers.forEach(server => {
@@ -342,6 +336,10 @@ function addServer (server) {
 function addMessage (message) { // This will come in handy later when we implement caching
   servers.get(message.server).messages.set(message.id, message);
 
+  if (message.server !== selectedServer) {
+    return;
+  }
+
   const messageContent = document.createElement('pre');
 
   if (message.content.toLowerCase().includes(`{${currentUser.toLowerCase()}}`)) {
@@ -381,6 +379,8 @@ function addMessage (message) { // This will come in handy later when we impleme
 
     document.getElementById('message-container').appendChild(m);
   }
+
+  scrollToBottom();
 }
 
 function displayMembers (members) {
