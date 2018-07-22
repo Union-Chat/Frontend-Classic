@@ -267,6 +267,7 @@ function snedMeHarder (event) {
         content: msg
       });
       elemelon.value = '';
+      resizeBox();
     }
   }
 }
@@ -524,7 +525,5 @@ const INBOUND_OPCODES = {
 };
 
 const OUTBOUND_OPCODES = {
-  'RequestMemberChunk': 9,
-  'SendMessage': 10,
-  'JoinServer': 11 // Should this be REST?
+  'RequestMemberChunk': 9
 };
