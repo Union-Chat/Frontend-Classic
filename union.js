@@ -550,26 +550,21 @@ const OUTBOUND_OPCODES = {
 };
 
 
-const broadcast = new WSAudioAPI.Streamer({
-  server: {
-    host: 'union.serux.pro',
-    port: 2087
-  }
-});
-
-const listen = new WSAudioAPI.Player({
-  server: {
-    host: 'union.serux.pro',
-    port: 2087
-  }
-});
+const broadcastWS = new WebSocket('wss://union.serux.pro:2087');
+const listenWS = new WebSocket('wss://union.serux.pro:2087');
+const broadcast = new WSAudioAPI.Streamer({}, broadcastWS);
+const listen = new WSAudioAPI.Player({}, listenWS);
 
 function startListening () {
   listen.start();
-  document.getElementById('indicator').style.backgroundColor = 'green';
+  const btn = document.getElementById('listenbtn');
+  btn.disabled = true;
+  btn.innerText = 'Listening...';
 }
 
 function startBroadcasting () {
   broadcast.start();
-  document.getElementById('indicator').style.backgroundColor = 'red';
+  const btn = document.getElementById('broadcastbtn');
+  btn.disabled = true;
+  btn.innerText = 'Broadcasting...';
 }
