@@ -550,10 +550,9 @@ const OUTBOUND_OPCODES = {
 };
 
 
-const broadcastWS = new WebSocket('wss://union.serux.pro:2087');
-const listenWS = new WebSocket('wss://union.serux.pro:2087');
-const broadcast = new WSAudioAPI.Streamer({}, broadcastWS);
-const listen = new WSAudioAPI.Player({}, listenWS);
+const voiceWS = new WebSocket('wss://union.serux.pro:2087');
+const broadcast = new WSAudioAPI.Streamer({}, voiceWS);
+const listen = new WSAudioAPI.Player({}, voiceWS);
 
 function startListening () {
   listen.start();
