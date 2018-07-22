@@ -373,6 +373,13 @@ a:hover {
   border-radius: 10px;
 }
 
+.monoblock {
+  background: rgb(45, 45, 45);
+  font-family: 'Inconsolata', monospace !important;
+  padding: 4px !important;
+  border-radius: 6px;
+}
+
 /* Responsive */
 @media screen and (max-width: 840px) {
   .member-list {

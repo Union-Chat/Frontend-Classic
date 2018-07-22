@@ -3,6 +3,7 @@ const boldRegex = new RegExp('(?:(?!\\\\).|^)(\\*\\*(.*?)\\*\\*)', 'g');
 const italicsRegex = new RegExp('(?:(?!\\\\).|^)(\\*(.*?)\\*)', 'g');
 const strikethroughRegex = new RegExp('(?:(?!\\\\).|^)(\\~\\~(.*?)\\~\\~)', 'g');
 const codeblockRegex = new RegExp('(?:(?!\\\\).|^)(\\`\\`\\`(.*?)\\`\\`\\`)', 'g');
+const monoblockRegex = new RegExp('(?:(?!\\\\).|^)(\\`(.*?)\\`)', 'g');
 const escapeRegex = /\\(\*|_|~|`)/g;
 
 /* Other Regex */
@@ -164,6 +165,13 @@ function parseText (text, serverId) {
       continue;
     }
     filtered = filtered.replace(codeblock[1], `<pre class="codeblock">${codeblock[2].trim()}</pre>`);
+  }
+
+  while ((monoblock = monoblockRegex.exec(filtered)) !== null) {
+    if (monoblock[2].length === 0) {
+      continue;
+    }
+    filtered = filtered.replace(monoblock[1], `<span class="monoblock">${monoblock[2].trim()}</span>`);
   }
 
   while ((mention = mentionRegex.exec(filtered)) !== null) {
