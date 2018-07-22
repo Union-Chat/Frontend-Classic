@@ -2,6 +2,7 @@
     <title>Union</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="ws-audio-api.min.js"></script>
     <script type="text/javascript" src="union.js"></script>
     <script type="text/javascript" src="emojis.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -28,6 +29,11 @@
           <div class="message-scroller" id="message-container"></div>
         </div>
         <textarea class="chatbox" id="message-input" oninput="resizeBox()" readonly maxlength="1000"></textarea>
+    </div>
+    <div class="audio-controls centered">
+      <div id="indicator" style="position: absolute; width: 10px; height: 10px; background-color: white; top: 20px; left: 10px; border-radius: 100%;"></div>
+      <button onclick="startListening()">Connect as listener</button>
+      <button onclick="startBroadcasting()">Connect as broadcaster</button>
     </div>
     <div class="member-list" id="members"></div>
   </div>

@@ -401,3 +401,19 @@ a:hover {
   background: #636363; 
   border-radius: 10px;
 }
+
+.audio-controls {
+  position: absolute;
+  background-color: rgb(80, 80, 80);
+  width: 500px;
+  height: 50px;
+  z-index: 99;
+  border-radius: 10px;
+  top: 90%;
+}
+
+.audio-controls button {
+  position: relative;
+  top: 25%;
+  left: 25%;
+}

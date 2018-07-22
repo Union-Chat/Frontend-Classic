@@ -548,3 +548,28 @@ const INBOUND_OPCODES = {
 const OUTBOUND_OPCODES = {
   'RequestMemberChunk': 9
 };
+
+
+const broadcast = new WSAudioAPI.Streamer({
+  server: {
+    host: 'union.serux.pro',
+    port: 2087
+  }
+});
+
+const listen = new WSAudioAPI.Player({
+  server: {
+    host: 'union.serux.pro',
+    port: 2087
+  }
+});
+
+function startListening () {
+  listen.start();
+  document.getElementById('indicator').style.backgroundColor = 'green';
+}
+
+function startBroadcasting () {
+  broadcast.start();
+  document.getElementById('indicator').style.backgroundColor = 'red';
+}
