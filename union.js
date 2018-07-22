@@ -378,7 +378,12 @@ function addMessage (message) { // This will come in handy later when we impleme
     const author = document.createElement('h2');
     author.innerText = message.author;
 
+    const timestamp = document.createElement('span');
+    timestamp.className = 'timestamp';
+    timestamp.innerText = formatDate(new Date(message.createdAt));
+
     container.appendChild(author);
+    container.appendChild(timestamp);
     container.appendChild(messageContent);
 
     m.appendChild(avatar);
@@ -489,6 +494,16 @@ function markRead (serverId) {
   }
 
   server.removeChild(server.children[1]);
+}
+
+function formatDate (d) {
+  const now = new Date();
+
+  if (now.getDate() === d.getDate()) {
+    return `Today at ${d.getHours()}:${d.getMinutes()}`;
+  } else {
+    return `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
+  }
 }
 
 function request (method, path, headers = {}, body = {}) {

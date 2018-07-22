@@ -124,6 +124,7 @@ body {
 }
 
 .message .container h2 {
+  display: inline-block;
   color: white;
   font-size: 20px;
   font-weight: 200;
@@ -158,6 +159,11 @@ body {
   min-height: 22px;
   object-fit: contain;
   vertical-align: -.4em;
+}
+
+.message .container .timestamp {
+  color: rgb(130, 130, 130);
+  font-size: 13px;
 }
 
 img.embed {
