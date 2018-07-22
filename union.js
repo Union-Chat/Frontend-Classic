@@ -103,7 +103,7 @@ function handleWSClose (close) {
   }
 }
 
-function parseText (text) {
+function parseText (text, serverId) {
   let filtered = text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace('\r\n', '<br>').replace(/\n/g, '<br>');
 
   const emojisInText = filtered.match(emojiRegex);
@@ -167,11 +167,9 @@ function parseText (text) {
   }
 
   while ((mention = mentionRegex.exec(filtered)) !== null) {
-    servers.forEach(server => {
-      if (server.members.some(m => m.id.toLowerCase() === mention[1].toLowerCase())) {
-        filtered = filtered.replace(mention[0], `<span class="mention">@${mention[1]}</span>`);
-      }
-    });
+    if (servers.get(serverId).members.some(m => m.id.toLowerCase() === mention[1].toLowerCase())) {
+      filtered = filtered.replace(mention[0], `<span class="mention">@${mention[1]}</span>`);
+    }
   }
 
   filtered = filtered.replace(escapeRegex, '$1'); // Hides backslash (escape character)
@@ -347,7 +345,7 @@ function addMessage (message) { // This will come in handy later when we impleme
     messageContent.setAttribute('style', 'background: rgb(70, 70, 70);');
   }
 
-  messageContent.innerHTML = parseText(message.content);
+  messageContent.innerHTML = parseText(message.content, message.server);
 
   const allMessages = document.querySelectorAll('.message');
   const lastMessage = allMessages[allMessages.length - 1];
