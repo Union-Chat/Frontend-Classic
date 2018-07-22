@@ -118,8 +118,6 @@ body {
 }
 
 .message .container {
-  display: flex;
-  flex-direction: column;
   width: 100%;
 }
 
@@ -130,6 +128,7 @@ body {
   font-weight: 200;
   margin: 0;
   padding-bottom: 3px;
+  padding-right: 6px;
 }
 
 .message .container pre {
