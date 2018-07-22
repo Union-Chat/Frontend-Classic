@@ -185,6 +185,7 @@ img.embed {
   margin-top: -15px;
   margin-left: 35px;
   background-color: rgb(255, 150, 50);
+  border: 1px solid white;
   border-radius: 100%;
 }
 
