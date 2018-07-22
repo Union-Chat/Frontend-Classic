@@ -291,6 +291,8 @@ function switchServer (server) {
 
   selectedServer = id;
 
+  markRead(id);
+
   chatbox.removeAttribute('readonly');
   chatbox.setAttribute('placeholder', `Message ${name}...`);
   chatbox.style.visibility = 'visible';
@@ -334,6 +336,7 @@ function addMessage (message) { // This will come in handy later when we impleme
   servers.get(message.server).messages.set(message.id, message);
 
   if (message.server !== selectedServer) {
+    markUnread(message.server);
     return;
   }
 
@@ -457,6 +460,28 @@ function resizeBox () {
   const chatbox = document.getElementById('message-input');
   chatbox.style.height = 'auto';
   chatbox.style.height = `${3 + chatbox.scrollHeight}px`;
+}
+
+function markUnread (serverId) {
+  const server = document.getElementById(serverId);
+
+  if (!server || server.children[1] && server.children[1].className === 'unread') {
+    return;
+  }
+
+  const unreadIndicator = document.createElement('div');
+  unreadIndicator.className = 'unread';
+  server.appendChild(unreadIndicator);
+}
+
+function markRead (serverId) {
+  const server = document.getElementById(serverId);
+
+  if (!server || server.children.length < 2 || server.children[1].className !== 'unread') {
+    return;
+  }
+
+  server.removeChild(server.children[1]);
 }
 
 function request (method, path, headers = {}, body = {}) {

@@ -20,6 +20,7 @@ body {
   padding-left: 5px;
   padding-right: 5px;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .member-list {
@@ -175,6 +176,16 @@ img.embed {
   height: 50px;
   border-radius: 100%;
   object-fit: cover;
+}
+
+.unread {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-top: -15px;
+  margin-left: 35px;
+  background-color: rgb(255, 150, 50);
+  border-radius: 100%;
 }
 
 .add-server {
@@ -370,7 +381,7 @@ a:hover {
 
 /* Scrollbear */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
