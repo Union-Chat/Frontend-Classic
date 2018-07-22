@@ -376,7 +376,7 @@ a:hover {
 .monoblock {
   background: rgb(45, 45, 45);
   font-family: 'Inconsolata', monospace !important;
-  padding: 4px !important;
+  padding: 3px !important;
   border-radius: 6px;
 }
 
