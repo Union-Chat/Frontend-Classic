@@ -10,6 +10,7 @@
 <body>
   <div class="login-modal centered" id="login">
     <h1>Login to Union</h1>
+    <!--<span class="login-error">Password must be 5 characters or more!</span>-->
     <input id="username" placeholder="Username" onkeypress="handleLoginShortcuts(event)" autofocus>
     <input id="password" type="password" placeholder="Password" onkeypress="handleLoginShortcuts(event)">
     <button onclick="connect()">Login</button>
@@ -26,7 +27,7 @@
         <div class="messages">
           <div class="message-scroller" id="message-container"></div>
         </div>
-        <textarea class="chatbox" placeholder="No server selected" id="whatthefuckdidyoujustsayaboutme" readonly maxlength="1000"></textarea>
+        <textarea class="chatbox" id="message-input" oninput="resizeBox()" readonly maxlength="1000"></textarea>
     </div>
     <div class="member-list" id="members"></div>
   </div>

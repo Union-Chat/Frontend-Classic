@@ -189,7 +189,7 @@ function handleWSMessage (message) {
         Notification.requestPermission();
       }
 
-      const chatbox = document.getElementById('whatthefuckdidyoujustsayaboutme');
+      const chatbox = document.getElementById('message-input');
       chatbox.addEventListener('keydown', snedMeHarder);
 
       j.d.forEach(addServer);
@@ -255,7 +255,7 @@ function handleWSMessage (message) {
 }
 
 function snedMeHarder (event) {
-  const elemelon = document.getElementById('whatthefuckdidyoujustsayaboutme');
+  const elemelon = document.getElementById('message-input');
   const msg = elemelon.value;
 
   if (event.keyCode === 13 && !event.shiftKey) {
@@ -281,7 +281,7 @@ function scrollToBottom () {
 }
 
 function switchServer (server) {
-  const chatbox = document.getElementById('whatthefuckdidyoujustsayaboutme');
+  const chatbox = document.getElementById('message-input');
   const id = Number(server.id);
   const name = server.getAttribute('server-name');
 
@@ -293,6 +293,7 @@ function switchServer (server) {
 
   chatbox.removeAttribute('readonly');
   chatbox.setAttribute('placeholder', `Message ${name}...`);
+  chatbox.style.visibility = 'visible';
 
   const sortedMembers = servers.get(selectedServer).members.sort(reorderSort);
   displayMembers(sortedMembers);
@@ -450,6 +451,12 @@ function joinServer () {
   });
 
   modal.style.visibility = 'hidden';
+}
+
+function resizeBox () {
+  const chatbox = document.getElementById('message-input');
+  chatbox.style.height = 'auto';
+  chatbox.style.height = `${3 + chatbox.scrollHeight}px`;
 }
 
 function request (method, path, headers = {}, body = {}) {
