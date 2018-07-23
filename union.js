@@ -201,7 +201,7 @@ function handleWSMessage (message) {
       j.d.forEach(addServer);
 
       const add = document.createElement('img');
-      add.setAttribute('src', 'add_icon.png');
+      add.setAttribute('src', 'img/add_icon.png');
       add.setAttribute('onclick', 'showServerModal()');
       add.className = 'add-server';
       document.getElementById('servers').appendChild(add);
@@ -290,7 +290,7 @@ function scrollToBottom () {
 function switchServer (server) {
   const chatbox = document.getElementById('message-input');
   const id = Number(server.id);
-  const name = server.getAttribute('server-name');
+  const serv = servers.get(id);
 
   if (selectedServer === id) {
     return;
@@ -300,11 +300,20 @@ function switchServer (server) {
 
   markRead(id);
 
+  if (serv.owner === currentUser) {
+    document.getElementById('server-invite').style.display = 'initial';
+    document.getElementById('server-delete').style.display = 'initial';
+  } else {
+    document.getElementById('server-invite').style.display = 'none';
+    document.getElementById('server-delete').style.display = 'none';
+  }
+
+  document.getElementById('server-title').innerText = serv.name;
   chatbox.removeAttribute('readonly');
-  chatbox.setAttribute('placeholder', `Message ${name}...`);
+  chatbox.setAttribute('placeholder', `Roast your friends...`);
   chatbox.style.visibility = 'visible';
 
-  const sortedMembers = servers.get(selectedServer).members.sort(reorderSort);
+  const sortedMembers = serv.members.sort(reorderSort);
   displayMembers(sortedMembers);
 
   const messages = document.getElementById('message-container');
@@ -313,7 +322,7 @@ function switchServer (server) {
     messages.removeChild(messages.firstChild);
   }
 
-  for (const m of servers.get(id).messages.values()) {
+  for (const m of serv.messages.values()) {
     addMessage(m);
   }
 
@@ -332,7 +341,7 @@ function addServer (server) {
 
   const icon = document.createElement('img');
   icon.setAttribute('src', server.iconUrl);
-  icon.setAttribute('onerror', 'this.src = \'default_avatar.png\';');
+  icon.setAttribute('onerror', 'this.src = \'img/default_server.png\';');
 
   s.appendChild(icon);
 
@@ -367,8 +376,8 @@ function addMessage (message) { // This will come in handy later when we impleme
     const avatar = document.createElement('img');
     const user = servers.get(message.server).members.find(m => m.id === message.author) || {};
 
-    avatar.setAttribute('src', user.avatarUrl || 'default_avatar.png');
-    avatar.setAttribute('onerror', 'this.src = \'default_avatar.png\';');
+    avatar.setAttribute('src', user.avatarUrl || 'img/default_avatar.png');
+    avatar.setAttribute('onerror', 'this.src = \'img/default_avatar.png\';');
 
     avatar.setAttribute('class', 'avatar');
 
@@ -410,8 +419,8 @@ function displayMembers (members) {
     elemelon.setAttribute('class', 'member');
     elemelon.setAttribute('id', `member-${member.id}`);
     icon.setAttribute('class', member.online ? 'online' : 'offline');
-    icon.setAttribute('src', member.avatarUrl || 'default_avatar.png');
-    icon.setAttribute('onerror', 'this.src = \'default_avatar.png\';');
+    icon.setAttribute('src', member.avatarUrl || 'img/default_avatar.png');
+    icon.setAttribute('onerror', 'this.src = \'img/default_avatar.png\';');
     username.innerText = member.id;
 
     elemelon.appendChild(icon);
@@ -440,7 +449,7 @@ function createServer () {
     return;
   }
 
-  const iconUrl = prompt('Server icon (url)?', 'default_avatar.png');
+  const iconUrl = prompt('Server icon (url)?', 'img/default_server.png');
 
   request('POST', '/api/server', {
     Authorization: `Basic ${_auth}`
@@ -494,6 +503,44 @@ function markRead (serverId) {
   }
 
   server.removeChild(server.children[1]);
+}
+
+async function generateInvite () {
+  if (!currentUser) {
+    return console.warn('Unable to generate invite; not logged in');
+  }
+
+  if (!selectedServer || !servers.get(selectedServer)) {
+    return console.warn('Invite generation called with an invalid server id');
+  }
+
+  if (servers.get(selectedServer).owner !== currentUser) {
+    return alert('You cannot generate invites for servers you don\'t own');
+  }
+
+  const invite = await request('POST', `/api/servers/${selectedServer}/invite`, {
+    Authorization: `Basic ${_auth}`
+  })
+  .catch(() => null);
+
+  if (!invite) {
+    return alert('Failed to generate invite!');
+  }
+
+  const modal = document.getElementById('i-modal');
+  modal.style.display = 'initial';
+
+  document.getElementById('invite-code').value = invite.code;
+}
+
+function copyInvite () {
+  const box = document.getElementById('invite-code');
+
+  box.select();
+  document.execCommand('copy');
+
+  document.getElementById('i-modal').style.display = 'none';
+  box.value = '';
 }
 
 function formatDate (d) {
