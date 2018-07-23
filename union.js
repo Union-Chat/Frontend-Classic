@@ -252,6 +252,10 @@ function handleWSMessage (message) {
       if (s) {
         s.parentElement.removeChild(s);
       }
+
+      if (selectedServer === j.d && servers.size > 0) {
+        switchServer([...servers.values()][0].id);
+      }
     }
 
 
@@ -287,9 +291,9 @@ function scrollToBottom () {
   //}
 }
 
-function switchServer (server) {
+function switchServer (serverId) {
   const chatbox = document.getElementById('message-input');
-  const id = Number(server.id);
+  const id = Number(serverId);
   const serv = servers.get(id);
 
   if (selectedServer === id) {
@@ -337,7 +341,7 @@ function addServer (server) {
   s.setAttribute('class', 'server');
   s.setAttribute('id', server.id);
   s.setAttribute('server-name', server.name);
-  s.addEventListener('click', () => switchServer(s));
+  s.addEventListener('click', () => switchServer(server.id));
 
   const icon = document.createElement('img');
   icon.setAttribute('src', server.iconUrl);
@@ -438,6 +442,30 @@ function showServerModal () {
   } else {
     modal.style.visibility = 'visible';
   }
+}
+
+function deleteServer () {
+  if (!currentUser) {
+    return console.warn('Unable to delete server; not logged in');
+  }
+
+  if (!selectedServer || !servers.get(selectedServer)) {
+    return console.warn('Delete server called with an invalid server id');
+  }
+
+  if (servers.get(selectedServer).owner !== currentUser) {
+    return alert('You cannot delete servers you don\'t own');
+  }
+
+  const proceed = confirm('Click OK to proceed with server deletion');
+
+  if (!proceed) {
+    return;
+  }
+
+  request('DELETE', `/api/server/${selectedServer}`, {
+    Authorization: `Basic ${_auth}`
+  });
 }
 
 function createServer () {
