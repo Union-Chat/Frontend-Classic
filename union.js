@@ -530,8 +530,7 @@ async function generateInvite () {
   const modal = document.getElementById('i-modal');
   modal.style.display = 'initial';
 
-  console.log(invite)
-  document.getElementById('invite-code').value = invite.code;
+  document.getElementById('invite-code').value = JSON.parse(invite).code;
 }
 
 function copyInvite () {
