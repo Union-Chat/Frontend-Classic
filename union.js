@@ -547,10 +547,14 @@ function formatDate (d) {
   const now = new Date();
 
   if (now.getDate() === d.getDate()) {
-    return `Today at ${d.getHours()}:${d.getMinutes()}`;
+    return `Today at ${forceTwoDigits(d.getHours())}:${forceTwoDigits(d.getMinutes())}`;
   } else {
-    return `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
+    return `${forceTwoDigits(d.getDate())}/${forceTwoDigits(d.getMonth())}/${d.getFullYear()}`;
   }
+}
+
+function forceTwoDigits (number) {
+  return number.toString().padStart(2, '0');
 }
 
 function request (method, path, headers = {}, body = {}) {
