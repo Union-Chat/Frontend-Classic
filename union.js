@@ -518,7 +518,7 @@ async function generateInvite () {
     return alert('You cannot generate invites for servers you don\'t own');
   }
 
-  const invite = await request('POST', `/api/servers/${selectedServer}/invite`, {
+  const invite = await request('POST', `/api/server/${selectedServer}/invite`, {
     Authorization: `Basic ${_auth}`
   })
   .catch(() => null);
