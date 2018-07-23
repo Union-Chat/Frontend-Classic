@@ -31,6 +31,7 @@ body {
   color: white;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .tool-box button {
@@ -41,7 +42,6 @@ body {
 }
 
 .tool-box {
-  width: 100%;
   color: white;
   justify-content: center;
   display: flex;
