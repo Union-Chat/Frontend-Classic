@@ -310,7 +310,7 @@ function switchServer (server) {
 
   document.getElementById('server-title').innerText = serv.name;
   chatbox.removeAttribute('readonly');
-  chatbox.setAttribute('placeholder', `Roast your friends...`);
+  chatbox.setAttribute('placeholder', 'Roast your friends...');
   chatbox.style.visibility = 'visible';
 
   const sortedMembers = serv.members.sort(reorderSort);
@@ -521,7 +521,7 @@ async function generateInvite () {
   const invite = await request('POST', `/api/server/${selectedServer}/invite`, {
     Authorization: `Basic ${_auth}`
   })
-  .catch(() => null);
+    .catch(() => null);
 
   if (!invite) {
     return alert('Failed to generate invite!');
