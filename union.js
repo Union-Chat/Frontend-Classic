@@ -550,20 +550,20 @@ const OUTBOUND_OPCODES = {
 };
 
 
-const voiceWS = new WebSocket('wss://union.serux.pro:2087');
-const broadcast = new WSAudioAPI.Streamer({}, voiceWS);
-const listen = new WSAudioAPI.Player({}, voiceWS);
+//const voiceWS = new WebSocket('wss://union.serux.pro:2087');
+//const broadcast = new WSAudioAPI.Streamer({}, voiceWS);
+//const listen = new WSAudioAPI.Player({}, voiceWS);
 
-function startListening () {
-  listen.start();
-  const btn = document.getElementById('listenbtn');
-  btn.disabled = true;
-  btn.innerText = 'Listening...';
-}
+//function startListening () {
+//  listen.start();
+//  const btn = document.getElementById('listenbtn');
+//  btn.disabled = true;
+//  btn.innerText = 'Listening...';
+//}
 
-function startBroadcasting () {
-  broadcast.start();
-  const btn = document.getElementById('broadcastbtn');
-  btn.disabled = true;
-  btn.innerText = 'Broadcasting...';
-}
+//function startBroadcasting () {
+//  broadcast.start();
+//  const btn = document.getElementById('broadcastbtn');
+//  btn.disabled = true;
+//  btn.innerText = 'Broadcasting...';
+//}

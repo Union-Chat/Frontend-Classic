@@ -23,6 +23,28 @@ body {
   overflow-x: hidden;
 }
 
+.server-tools {
+  width: 100%;
+  height: 50px;
+  background-color: rgb(50, 50, 50);
+  font-family: 'Roboto', sans-serif;
+}
+
+.server-tools * {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  width: auto;
+}
+
+.server-tools button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+}
+
 .member-list {
   height: 100%;
   width: 250px;
