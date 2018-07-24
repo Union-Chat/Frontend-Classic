@@ -221,9 +221,13 @@ function handleWSMessage (message) {
       addMessage(j.d);
 
       if (j.d.content.toLowerCase().includes(`{${currentUser.toLowerCase()}}`) && 'Notification' in window && !document.hasFocus()) { // Mention
+        const m = servers.get(j.d.server).members.find(m => m.id === j.d.author);
+
         const notif = new Notification(`${j.d.author} mentioned you!`, {
+          icon: m ? m.avatarUrl : '',
           body: j.d.content.replace(mentionRegex, '@$1')
         });
+
         notif.onclick = () => {
           window.focus();
           notif.close();
