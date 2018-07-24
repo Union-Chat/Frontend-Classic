@@ -41,6 +41,14 @@ function reorderSort (a, b) {
   return 0;
 }
 
+function load () {
+  _auth = localStorage.getItem('token');
+
+  if (_auth !== null) {
+    connect();
+  }
+}
+
 function handleLoginShortcuts (event) {
   if (event.keyCode === 13) {
     connect();
@@ -191,6 +199,8 @@ function handleWSMessage (message) {
     console.log('WS message received', j);
 
     if (j.op === INBOUND_OPCODES.Hello) { // hello
+      localStorage.setItem('token', _auth);
+
       if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission();
       }
