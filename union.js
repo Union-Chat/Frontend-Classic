@@ -288,6 +288,12 @@ function handleWSMessage (message) {
         const ind = serv.members.indexOf(j.d.user);
 
         serv.members.splice(ind, 1);
+
+        const m = document.getElementById(`member-${j.d.user}`);
+
+        if (m) {
+          m.parentElement.removeChild(m);
+        }
       }
     }
 
