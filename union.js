@@ -494,7 +494,7 @@ function deleteServer () {
     return alert('You cannot delete servers you don\'t own');
   }
 
-  const proceed = confirm('Click OK to proceed with server deletion');
+  const proceed = confirm(`Click OK to confirm deletion of ${servers.get(selectedServer).name}`);
 
   if (!proceed) {
     return;
