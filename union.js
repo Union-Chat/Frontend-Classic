@@ -321,9 +321,11 @@ function switchServer (serverId) {
   if (serv.owner === currentUser) {
     document.getElementById('server-invite').style.display = 'initial';
     document.getElementById('server-delete').style.display = 'initial';
+    document.getElementById('server-leave').style.display = 'none';
   } else {
     document.getElementById('server-invite').style.display = 'none';
     document.getElementById('server-delete').style.display = 'none';
+    document.getElementById('server-leave').style.display = 'initial';
   }
 
   document.getElementById('server-title').innerText = serv.name;
@@ -478,6 +480,30 @@ function deleteServer () {
   }
 
   request('DELETE', `/api/server/${selectedServer}`, {
+    Authorization: `Basic ${_auth}`
+  });
+}
+
+function leaveServer () {
+  if (!currentUser) {
+    return console.warn('Unable to leave server; not logged in');
+  }
+
+  if (!selectedServer || !servers.get(selectedServer)) {
+    return console.warn('Leave server called with an invalid server id');
+  }
+
+  if (servers.get(selectedServer).owner === currentUser) {
+    return alert('You may not leave servers you own. Delete them instead.');
+  }
+
+  const proceed = confirm('Click OK to leave the server');
+
+  if (!proceed) {
+    return;
+  }
+
+  request('DELETE', `/api/self/server/${selectedServer}`, {
     Authorization: `Basic ${_auth}`
   });
 }
