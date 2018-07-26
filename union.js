@@ -285,7 +285,7 @@ function handleWSMessage (message) {
         }
       } else {
         const serv = servers.get(j.d.server);
-        const ind = serv.members.indexOf(j.d.user);
+        const ind = serv.members.findIndex(u => u.id === j.d.user);
 
         serv.members.splice(ind, 1);
 
