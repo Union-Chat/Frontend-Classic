@@ -283,6 +283,11 @@ function handleWSMessage (message) {
         if (selectedServer === j.d.server && servers.size > 0) {
           switchServer([...servers.values()][0].id);
         }
+      } else {
+        const serv = servers.get(j.d.server);
+        const ind = serv.members.indexOf(j.d.user);
+
+        serv.members.splice(ind, 1);
       }
     }
 
