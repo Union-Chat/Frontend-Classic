@@ -661,7 +661,8 @@ const INBOUND_OPCODES = {
   'ServerJoin': 5,     // self joined server
   'ServerLeave': 6,    // self left server
   'MemberChunk': 7,    // received chunk of server members
-  'DeleteMessage': 8   // message deleted
+  'DeleteMessage': 8,  // message deleted
+  'MemberLeave': 10    // member left server
 };
 
 const OUTBOUND_OPCODES = {
