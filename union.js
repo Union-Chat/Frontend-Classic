@@ -270,6 +270,20 @@ function handleWSMessage (message) {
       if (selectedServer === j.d && servers.size > 0) {
         switchServer([...servers.values()][0].id);
       }
+    } else if (j.op === INBOUND_OPCODES.MemberLeave) {
+      if (j.d.user === currentUser) {
+        const s = document.getElementById(j.d.server);
+
+        if (s) {
+          s.parentElement.removeChild(s);
+        }
+
+        servers.delete(j.d.server);
+
+        if (selectedServer === j.d.server && servers.size > 0) {
+          switchServer([...servers.values()][0].id);
+        }
+      }
     }
 
 
