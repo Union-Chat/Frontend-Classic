@@ -391,6 +391,7 @@ function addServer (server) {
   s.appendChild(icon);
 
   document.getElementById('servers').prepend(s);
+  switchServer(server.id);
 }
 
 function addMessage (message) { // This will come in handy later when we implement caching
