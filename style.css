@@ -39,10 +39,16 @@ body {
   margin-left: 10px;
 }
 
+.tool-box {
+  color: white;
+  justify-content: center;
+  display: flex;
+}
+
 .tool-box button {
   height: 100%;
-  width: 35px;
-  padding: 5px;
+  width: 40px;
+  padding: 2px;
   margin-right: 5px;
   background-color: transparent;
   color: white;
@@ -59,10 +65,10 @@ body {
   transition: 0.5s;
 }
 
-.tool-box {
-  color: white;
-  justify-content: center;
-  display: flex;
+.tool-box button img {
+  object-fit: scale-down;
+  width: 70%;
+  height: 70%;
 }
 
 .member-list {
