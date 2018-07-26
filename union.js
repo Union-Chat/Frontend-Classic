@@ -533,7 +533,7 @@ function createServer () {
   const serverName = prompt('Server name?');
 
   if (!serverName) {
-    modal.style.visibility = 'hidden';
+    modal.classList.toggle('slideout');
     return;
   }
 
@@ -546,7 +546,7 @@ function createServer () {
     iconUrl
   });
 
-  modal.style.visibility = 'hidden';
+  modal.classList.toggle('slideout');
 }
 
 function joinServer () {
@@ -554,7 +554,7 @@ function joinServer () {
   const inviteCode = prompt('Enter invite code');
 
   if (!inviteCode) {
-    modal.style.visibility = 'hidden';
+    modal.classList.toggle('slideout');
     return;
   }
 
@@ -562,7 +562,7 @@ function joinServer () {
     Authorization: `Basic ${_auth}`
   });
 
-  modal.style.visibility = 'hidden';
+  modal.classList.toggle('slideout');
 }
 
 function resizeBox () {
