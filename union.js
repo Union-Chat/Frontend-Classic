@@ -477,12 +477,7 @@ function displayMembers (members) {
 
 function showServerModal () {
   const modal = document.getElementById('s-modal');
-
-  if (modal.style.visibility === 'visible') {
-    modal.style.visibility = 'hidden';
-  } else {
-    modal.style.visibility = 'visible';
-  }
+  modal.classList.toggle('slideout');
 }
 
 function deleteServer () {
