@@ -394,7 +394,7 @@ function addServer (server) {
   switchServer(server.id);
 }
 
-function addMessage (message) { // This will come in handy later when we implement caching
+function addMessage (message) {
   servers.get(message.server).messages.set(message.id, message);
 
   if (message.server !== selectedServer) {
@@ -493,9 +493,7 @@ function toggleModalAnim (modal) {
     m.style.display = null;
   }
 
-  setTimeout(() => {
-    m.classList.toggle('slideout');
-  }, 50);
+  setTimeout(() => m.classList.toggle('slideout'), 50);
 }
 
 function deleteServer () {
@@ -588,25 +586,23 @@ function resizeBox () {
 }
 
 function markUnread (serverId) {
-  const server = document.getElementById(serverId);
+  const indicator = document.querySelector(`[id="${serverId}"] .unread`);
 
-  if (!server || server.children[1] && server.children[1].className === 'unread') {
+  if (indicator) {
     return;
   }
 
   const unreadIndicator = document.createElement('div');
   unreadIndicator.className = 'unread';
-  server.appendChild(unreadIndicator);
+  document.getElementById(serverId).appendChild(unreadIndicator);
 }
 
 function markRead (serverId) {
-  const server = document.getElementById(serverId);
+  const indicator = document.querySelector(`[id="${serverId}"] .unread`);
 
-  if (!server || server.children.length < 2 || server.children[1].className !== 'unread') {
-    return;
+  if (indicator) {
+    indicator.remove();
   }
-
-  server.removeChild(server.children[1]);
 }
 
 async function generateInvite () {
