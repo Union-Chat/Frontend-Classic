@@ -212,7 +212,7 @@ function handleWSMessage (message) {
 
       const add = document.createElement('img');
       add.setAttribute('src', 'img/add_icon.png');
-      add.setAttribute('onclick', 'showServerModal()');
+      add.setAttribute('onclick', 'toggleModalAnim("s-modal")');
       add.className = 'add-server';
       document.getElementById('servers').appendChild(add);
     }
@@ -476,9 +476,26 @@ function displayMembers (members) {
   }
 }
 
-function showServerModal () {
-  const modal = document.getElementById('s-modal');
-  modal.classList.toggle('slideout');
+function toggleModalAnim (modal) {
+  const m = document.getElementById(modal);
+
+  if (!m) {
+    return;
+  }
+
+  if (!m.classList.contains('slideout')) {
+    setTimeout(() => {
+      if (m.classList.contains('slideout')) {
+        m.style.display = 'none';
+      }
+    }, 500);
+  } else {
+    m.style.display = null;
+  }
+
+  setTimeout(() => {
+    m.classList.toggle('slideout');
+  }, 50);
 }
 
 function deleteServer () {
@@ -530,11 +547,10 @@ function leaveServer () {
 }
 
 function createServer () {
-  const modal = document.getElementById('s-modal');
   const serverName = prompt('Server name?');
 
   if (!serverName) {
-    modal.classList.toggle('slideout');
+    toggleModalAnim('s-modal');
     return;
   }
 
@@ -547,15 +563,14 @@ function createServer () {
     iconUrl
   });
 
-  modal.classList.toggle('slideout');
+  toggleModalAnim('s-modal');
 }
 
 function joinServer () {
-  const modal = document.getElementById('s-modal');
   const inviteCode = prompt('Enter invite code');
 
   if (!inviteCode) {
-    modal.classList.toggle('slideout');
+    toggleModalAnim('s-modal');
     return;
   }
 
@@ -563,7 +578,7 @@ function joinServer () {
     Authorization: `Basic ${_auth}`
   });
 
-  modal.classList.toggle('slideout');
+  toggleModalAnim('s-modal');
 }
 
 function resizeBox () {
