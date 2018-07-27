@@ -506,13 +506,6 @@ a:hover {
   opacity: 0;
   transition: 0.5s;
   transition-timing-function: cubic-bezier(0.735, -0.28, 0.6, 0.045);
-  animation: testing 0.5s forwards;
-}
-
-@keyframes testing {
-  to {
-    display: none;
-  }
 }
 
 @keyframes fadein {
