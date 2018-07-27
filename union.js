@@ -264,7 +264,7 @@ function handleWSMessage (message) {
       const s = document.getElementById(j.d);
 
       if (s) {
-        s.parentElement.removeChild(s);
+        s.remove();
       }
 
       if (selectedServer === j.d && servers.size > 0) {
@@ -275,7 +275,7 @@ function handleWSMessage (message) {
         const s = document.getElementById(j.d.server);
 
         if (s) {
-          s.parentElement.removeChild(s);
+          s.remove();
         }
 
         servers.delete(j.d.server);
@@ -292,7 +292,7 @@ function handleWSMessage (message) {
         const m = document.getElementById(`member-${j.d.user}`);
 
         if (m) {
-          m.parentElement.removeChild(m);
+          m.remove();
         }
       }
     }
