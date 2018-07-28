@@ -255,7 +255,7 @@ function handleWSMessage (message) {
         displayMembers(sortedMembers);
       }
     } else if (j.op === INBOUND_OPCODES.ServerJoin) { // server join
-      addServer(j.d);
+      addServer(j.d, true);
     } else if (j.op === INBOUND_OPCODES.ServerLeave) {
       if (servers.has(j.d)) {
         servers.delete(j.d);
@@ -373,7 +373,7 @@ function switchServer (serverId) {
   scrollToBottom();
 }
 
-function addServer (server) {
+function addServer (server, select = false) {
   server.messages = new Map();
   servers.set(server.id, server);
 
@@ -390,7 +390,10 @@ function addServer (server) {
   s.appendChild(icon);
 
   document.getElementById('servers').prepend(s);
-  switchServer(server.id);
+
+  if (select) {
+    switchServer(server.id);
+  }
 }
 
 function addMessage (message) {
