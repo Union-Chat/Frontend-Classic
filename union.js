@@ -65,18 +65,22 @@ async function signup () {
 
 function connect () {
   document.getElementById('login').style.display = 'none';
-
-  const [username, password] = _auth !== null
-    ? atob(_auth).split(':')
-    : ['username', 'password'].map(id => document.getElementById(id).value);
-
-  if (_auth === null) {
-    _auth = btoa(`${username}:${password}`);
-  }
-
-  ws = new WebSocket(`wss://${username}:${password}@union.serux.pro:2096`);
+  ws = new WebSocket('wss://union.serux.pro:2096');
+  ws.onopen = authenticateClient; // Stupid JS Websocket doesn't support headers REEEEEEEEE
   ws.onclose = handleWSClose;
   ws.onmessage = handleWSMessage;
+}
+
+function authenticateClient () {
+  if (_auth !== null) {
+    currentUser = atob(_auth).split(':')[0];
+  } else {
+    const [username, password] = ['username', 'password'].map(id => document.getElementById(id).value);
+    _auth = btoa(`${username}:${password}`);
+    currentUser = username;
+  }
+
+  ws.send(`Basic ${_auth}`);
 }
 
 function handleWSClose (close) {
@@ -196,7 +200,6 @@ function handleWSMessage (message) {
 
     if (j.op === INBOUND_OPCODES.Hello) { // hello
       localStorage.setItem('token', _auth);
-      currentUser = atob(_auth).split(':')[0];
 
       if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission();
