@@ -49,7 +49,10 @@ function load () {
   }
 
   window.addEventListener('keydown', () => {
-    document.getElementById('message-input').focus();
+    const shouldFocus = !(document.activeElement && document.activeElement.id === 'message-input');
+    if (shouldFocus) {
+      document.getElementById('message-input').focus();
+    }
   });
 }
 
