@@ -391,7 +391,7 @@ function addServer (server, select = false) {
 
   document.getElementById('servers').prepend(s);
 
-  if (select) {
+  if (select === true) {
     switchServer(server.id);
   }
 }
