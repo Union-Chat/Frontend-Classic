@@ -47,6 +47,10 @@ function load () {
   if (_auth !== null) {
     connect();
   }
+
+  window.addEventListener('keydown', () => {
+    document.getElementById('message-input').focus();
+  });
 }
 
 function handleLoginShortcuts (event) {
