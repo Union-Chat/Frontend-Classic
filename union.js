@@ -44,12 +44,12 @@ function reorderSort (a, b) {
 function load () {
   _auth = localStorage.getItem('token');
 
-  if (_auth !== null) {
+  if (null !== _auth) {
     connect();
   }
 
   window.addEventListener('keydown', () => {
-    const shouldFocus = !(document.activeElement && document.activeElement.id === 'message-input');
+    const shouldFocus = !(document.activeElement && 'message-input' === document.activeElement.id);
     if (shouldFocus) {
       document.getElementById('message-input').focus();
     }
@@ -57,7 +57,7 @@ function load () {
 }
 
 function handleLoginShortcuts (event) {
-  if (event.keyCode === 13) {
+  if (13 === event.keyCode) {
     connect();
   }
 }
@@ -67,8 +67,8 @@ async function signup () {
   const password = document.getElementById('password').value;
 
   request('POST', '/api/create', {}, { username, password })
-    .then(res => {
-      alert(res);
+    .then(id => {
+      alert(`Welcome to Union! Your ID for logging in: ${id}`);
     })
     .catch(err => {
       const { error } = JSON.parse(err);
@@ -79,13 +79,14 @@ async function signup () {
 function connect () {
   document.getElementById('login').style.display = 'none';
   ws = new WebSocket('wss://union.serux.pro:2096');
+  //ws = new WebSocket('ws://127.0.0.1:2096'); /// dev
   ws.onopen = authenticateClient; // Stupid JS Websocket doesn't support headers REEEEEEEEE
   ws.onclose = handleWSClose;
   ws.onmessage = handleWSMessage;
 }
 
 function authenticateClient () {
-  if (_auth !== null) {
+  if (null !== _auth) {
     currentUser = atob(_auth).split(':')[0];
   } else {
     const [username, password] = ['username', 'password'].map(id => document.getElementById(id).value);
@@ -106,7 +107,7 @@ function handleWSClose (close) {
     serverList.removeChild(serverList.lastChild);
   }
 
-  if (close.code !== 4001) {
+  if (4001 !== close.code) {
     setTimeout(connect, 3e3); // try to reconnect
   } else {
     const messages = document.getElementById('message-container');
@@ -152,28 +153,28 @@ function parseText (text, serverId) {
     }
   }
 
-  while ((bold = boldRegex.exec(filtered)) !== null) {
-    if (bold[2].length === 0) {
+  while (null !== (bold = boldRegex.exec(filtered))) {
+    if (0 === bold[2].length) {
       continue;
     }
     filtered = filtered.replace(bold[1], `<b>${bold[2]}</b>`);
   }
 
-  while ((italics = italicsRegex.exec(filtered)) !== null) {
-    if (italics[2].length === 0) {
+  while (null !== (italics = italicsRegex.exec(filtered))) {
+    if (0 === italics[2].length) {
       continue;
     }
     filtered = filtered.replace(italics[1], `<i>${italics[2]}</i>`);
   }
 
-  while ((strikeThrough = strikethroughRegex.exec(filtered)) !== null) {
-    if (strikeThrough[2].length === 0) {
+  while (null !== (strikeThrough = strikethroughRegex.exec(filtered))) {
+    if (0 === strikeThrough[2].length) {
       continue;
     }
     filtered = filtered.replace(strikeThrough[1], `<s>${strikeThrough[2]}</s>`);
   }
 
-  while ((codeblock = codeblockRegex.exec(filtered)) !== null) {
+  while (null !== (codeblock = codeblockRegex.exec(filtered))) {
     if (codeblock[2].startsWith('<br>')) {
       codeblock[2] = codeblock[2].slice(4);
     }
@@ -182,20 +183,20 @@ function parseText (text, serverId) {
       codeblock[2] = codeblock[2].slice(0, codeblock[2].length - 4);
     }
 
-    if (codeblock[2].length === 0) {
+    if (0 === codeblock[2].length) {
       continue;
     }
     filtered = filtered.replace(codeblock[1], `<pre class="codeblock">${codeblock[2].trim()}</pre>`);
   }
 
-  while ((monoblock = monoblockRegex.exec(filtered)) !== null) {
-    if (monoblock[2].length === 0) {
+  while (null !== (monoblock = monoblockRegex.exec(filtered))) {
+    if (0 === monoblock[2].length) {
       continue;
     }
     filtered = filtered.replace(monoblock[1], `<span class="monoblock">${monoblock[2].trim()}</span>`);
   }
 
-  while ((mention = mentionRegex.exec(filtered)) !== null) {
+  while (null !== (mention = mentionRegex.exec(filtered))) {
     if (servers.get(serverId).members.some(m => m.id.toLowerCase() === mention[1].toLowerCase())) {
       filtered = filtered.replace(mention[0], `<span class="mention">@${mention[1]}</span>`);
     }
@@ -214,7 +215,7 @@ function handleWSMessage (message) {
     if (j.op === INBOUND_OPCODES.Hello) { // hello
       localStorage.setItem('token', _auth);
 
-      if ('Notification' in window && Notification.permission === 'default') {
+      if ('Notification' in window && 'default' === Notification.permission) {
         Notification.requestPermission();
       }
 
@@ -280,7 +281,7 @@ function handleWSMessage (message) {
         s.remove();
       }
 
-      if (selectedServer === j.d && servers.size > 0) {
+      if (selectedServer === j.d && 0 < servers.size) {
         switchServer([...servers.values()][0].id);
       }
     } else if (j.op === INBOUND_OPCODES.MemberLeave) {
@@ -293,7 +294,7 @@ function handleWSMessage (message) {
 
         servers.delete(j.d.server);
 
-        if (selectedServer === j.d.server && servers.size > 0) {
+        if (selectedServer === j.d.server && 0 < servers.size) {
           switchServer([...servers.values()][0].id);
         }
       } else {
@@ -319,9 +320,9 @@ function snedMeHarder (event) {
   const elemelon = document.getElementById('message-input');
   const msg = elemelon.value;
 
-  if (event.keyCode === 13 && !event.shiftKey) {
+  if (13 === event.keyCode && !event.shiftKey) {
     event.preventDefault();
-    if (msg.trim().length > 0) {
+    if (0 < msg.trim().length) {
       request('POST', `/api/server/${selectedServer}/messages`, {
         Authorization: `Basic ${_auth}`
       }, {
@@ -404,7 +405,7 @@ function addServer (server, select = false) {
 
   document.getElementById('servers').prepend(s);
 
-  if (select === true) {
+  if (true === select) {
     switchServer(server.id);
   }
 }
@@ -468,7 +469,7 @@ function addMessage (message) {
 function displayMembers (members) {
   const memberList = document.getElementById('members');
 
-  while (memberList.firstChild !== null) {
+  while (null !== memberList.firstChild) {
     memberList.removeChild(memberList.firstChild);
   }
 
@@ -686,7 +687,7 @@ function request (method, path, headers = {}, body = {}) {
 
     req.onload = () => {
       if (req.readyState === XMLHttpRequest.DONE) {
-        if (req.status === 200) {
+        if (200 === req.status) {
           resolve(req.responseText);
         } else {
           reject(req.responseText);
