@@ -66,8 +66,14 @@ async function signup () {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
-  const req = await request('POST', '/api/create', {}, { username, password });
-  alert(req);
+  request('POST', '/api/create', {}, { username, password })
+    .then(res => {
+      alert(res);
+    })
+    .catch(err => {
+      const { error } = JSON.parse(err);
+      alert(error);
+    });
 }
 
 function connect () {
