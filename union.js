@@ -487,7 +487,7 @@ function displayMembers (members) {
     const username = document.createElement('h2');
 
     elemelon.setAttribute('class', 'member');
-    elemelon.setAttribute('id', `member-${member.id}`);
+    elemelon.setAttribute('id', `member-${member.username}`);
     icon.setAttribute('class', member.online ? 'online' : 'offline');
     icon.setAttribute('src', member.avatarUrl || 'img/default_avatar.png');
     icon.setAttribute('onerror', 'this.src = \'img/default_avatar.png\';');
