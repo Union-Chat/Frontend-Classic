@@ -205,8 +205,8 @@ function parseText (text, serverId) {
   }
 
   for (const m of servers.get(serverId).members) {
-    if (filtered.includes(`@${m.id}`)) {
-      filtered = filtered.replace(new RegExp(`@${m.id}`, 'g'), `<span class="mention">@${m.id}</span>`);
+    if (filtered.includes(`@${m.username}`)) {
+      filtered = filtered.replace(new RegExp(`@${m.username}`, 'g'), `<span class="mention">@${m.username}</span>`);
     }
   }
 
