@@ -13,7 +13,10 @@ const imageRegex = /(?:([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(
 const mentionRegex = /\{(.+?)}/g;
 
 const servers = new Map();
-let currentUser = null;
+let currentUser = {
+  id: null,
+  tag: null
+};
 let _auth = null;
 let ws = null;
 let selectedServer = null;
@@ -89,11 +92,11 @@ function connect () {
 
 function authenticateClient () {
   if (_auth) {
-    currentUser = atob(_auth).split(':')[0];
+    currentUser.tag = atob(_auth).split(':')[0];
   } else {
     const [username, password] = ['username', 'password'].map(id => document.getElementById(id).value);
     _auth = btoa(`${username}:${password}`);
-    currentUser = username;
+    currentUser.tag = username;
   }
 
   ws.send(`Basic ${_auth}`);
@@ -101,7 +104,7 @@ function authenticateClient () {
 
 function handleWSClose (close) {
   console.log(`Websocket disconnected (${close.code}): ${close.reason}`);
-  currentUser = null;
+  currentUser = { id: null, tag: null };
 
   const serverList = document.getElementById('servers');
 
@@ -239,7 +242,7 @@ function handleWSMessage (message) {
     if (j.op === INBOUND_OPCODES.Message) { // message
       addMessage(j.d);
 
-      if (j.d.content.toLowerCase().includes(`{${currentUser.toLowerCase()}}`) && 'Notification' in window && !document.hasFocus()) { // Mention
+      if (j.d.content.toLowerCase().includes(`@${currentUser.tag.split('#')[0]}`) && 'Notification' in window && !document.hasFocus()) { // Mention
         const m = servers.get(j.d.server).members.find(m => m.id === j.d.author);
 
         const notif = new Notification(`${j.d.author} mentioned you!`, {
@@ -290,7 +293,7 @@ function handleWSMessage (message) {
         switchServer([...servers.values()][0].id);
       }
     } else if (j.op === INBOUND_OPCODES.MemberLeave) {
-      if (j.d.user === currentUser) {
+      if (j.d.user === currentUser.id) { // TODO:
         const s = document.getElementById(j.d.server);
 
         if (s) {
@@ -361,7 +364,7 @@ function switchServer (serverId) {
 
   markRead(id);
 
-  if (serv.owner === currentUser) {
+  if (serv.owner === currentUser.id) {
     document.getElementById('server-invite').style.display = 'initial';
     document.getElementById('server-delete').style.display = 'initial';
     document.getElementById('server-leave').style.display = 'none';
@@ -425,7 +428,7 @@ function addMessage (message) {
 
   const messageContent = document.createElement('pre');
 
-  if (message.content.toLowerCase().includes(`{${currentUser.toLowerCase()}}`)) {
+  if (message.content.toLowerCase().includes(`@${currentUser.tag.split('#')[0]}`)) {
     messageContent.setAttribute('style', 'background: rgb(70, 70, 70);');
   }
 
@@ -518,7 +521,7 @@ function toggleModalAnim (modal) {
 }
 
 function deleteServer () {
-  if (!currentUser) {
+  if (!currentUser.id) {
     return console.warn('Unable to delete server; not logged in');
   }
 
@@ -526,7 +529,7 @@ function deleteServer () {
     return console.warn('Delete server called with an invalid server id');
   }
 
-  if (servers.get(selectedServer).owner !== currentUser) {
+  if (servers.get(selectedServer).owner !== currentUser.id) {
     return alert('You cannot delete servers you don\'t own');
   }
 
@@ -542,7 +545,7 @@ function deleteServer () {
 }
 
 function leaveServer () {
-  if (!currentUser) {
+  if (!currentUser.id) {
     return console.warn('Unable to leave server; not logged in');
   }
 
@@ -550,7 +553,7 @@ function leaveServer () {
     return console.warn('Leave server called with an invalid server id');
   }
 
-  if (servers.get(selectedServer).owner === currentUser) {
+  if (servers.get(selectedServer).owner === currentUser.id) {
     return alert('You may not leave servers you own. Delete them instead.');
   }
 
@@ -627,7 +630,7 @@ function markRead (serverId) {
 }
 
 async function generateInvite () {
-  if (!currentUser) {
+  if (!currentUser.id) {
     return console.warn('Unable to generate invite; not logged in');
   }
 
@@ -635,7 +638,7 @@ async function generateInvite () {
     return console.warn('Invite generation called with an invalid server id');
   }
 
-  if (servers.get(selectedServer).owner !== currentUser) {
+  if (servers.get(selectedServer).owner !== currentUser.id) {
     return alert('You cannot generate invites for servers you don\'t own');
   }
 
