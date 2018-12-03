@@ -222,7 +222,7 @@ async function handleWSMessage (message) {
 
     if (j.op === INBOUND_OPCODES.Hello) { // hello
       localStorage.setItem('token', _auth);
-      currentUser.id = (await request('GET', '/api/users/me', { Authorization: `Basic ${_auth}` })).id;
+      currentUser.id = JSON.parse(await request('GET', '/api/users/me', { Authorization: `Basic ${_auth}` })).id;
 
       if ('Notification' in window && 'default' === Notification.permission) {
         Notification.requestPermission();
