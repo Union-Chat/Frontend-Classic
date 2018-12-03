@@ -361,7 +361,7 @@ function switchServer (serverId) {
 
   selectedServer = serverId;
 
-  markRead(id);
+  markRead(serverId);
 
   if (serv.owner === currentUser.id) {
     document.getElementById('server-invite').style.display = 'initial';
