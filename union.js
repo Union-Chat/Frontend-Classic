@@ -112,6 +112,9 @@ function handleWSClose (close) {
   if (4001 !== close.code) {
     setTimeout(connect, 3e3); // try to reconnect
   } else {
+    _auth = null;
+    localStorage.setItem('token', null);
+
     const messages = document.getElementById('message-container');
 
     while(messages.firstChild) {
