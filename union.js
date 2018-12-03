@@ -215,13 +215,14 @@ function parseText (text, serverId) {
   return filtered;
 }
 
-function handleWSMessage (message) {
+async function handleWSMessage (message) {
   try {
     const j = JSON.parse(message.data);
     console.log('WS message received', j);
 
     if (j.op === INBOUND_OPCODES.Hello) { // hello
       localStorage.setItem('token', _auth);
+      currentUser.id = (await request('GET', '/api/users/me', { Authorization: `Basic ${_auth}` })).id;
 
       if ('Notification' in window && 'default' === Notification.permission) {
         Notification.requestPermission();
@@ -425,6 +426,8 @@ function addMessage (message) {
     return;
   }
 
+  const user = servers.get(message.server).members.find(m => m.id === message.author) || {};
+
   const messageContent = document.createElement('pre');
 
   if (message.content.toLowerCase().includes(`@${currentUser.tag.split('#')[0]}`)) {
@@ -436,14 +439,13 @@ function addMessage (message) {
   const allMessages = document.querySelectorAll('.message');
   const lastMessage = allMessages[allMessages.length - 1];
 
-  if (lastMessage && lastMessage.querySelector('h2').innerHTML === message.author) {
+  if (lastMessage && lastMessage.querySelector('h2').innerHTML === user.username) {
     lastMessage.getElementsByClassName('container')[0].appendChild(messageContent);
   } else {
     const m = document.createElement('div');
     m.setAttribute('class', 'message');
 
     const avatar = document.createElement('img');
-    const user = servers.get(message.server).members.find(m => m.id === message.author) || {};
 
     avatar.setAttribute('src', user.avatarUrl || 'img/default_avatar.png');
     avatar.setAttribute('onerror', 'this.src = \'img/default_avatar.png\';');
@@ -454,7 +456,7 @@ function addMessage (message) {
     container.setAttribute('class', 'container');
 
     const author = document.createElement('h2');
-    author.innerText = message.author;
+    author.innerText = user.username;
 
     const timestamp = document.createElement('span');
     timestamp.className = 'timestamp';
