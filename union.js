@@ -351,7 +351,7 @@ function scrollToBottom () {
 function switchServer (serverId) {
   const chatbox = document.getElementById('message-input');
   const id = Number(serverId);
-  const serv = servers.get(id);
+  const serv = servers.get(serverId);
 
   if (selectedServer === id) {
     return;
