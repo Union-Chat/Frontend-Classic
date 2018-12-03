@@ -10,7 +10,7 @@
 </head>
 
 <body onload="load()">
-  <div class="login-modal centered" id="login">
+  <div class="login-modal centered" id="login" style="display: none;">
     <h1>Login to Union</h1>
     <!--<span class="login-error">Password must be 5 characters or more!</span>-->
     <input id="username" placeholder="Username#discrim" onkeypress="handleLoginShortcuts(event)" autofocus>
@@ -31,7 +31,10 @@
     </div>
   </div>
   <div class="content">
-    <div class="server-list" id="servers"></div>
+    <div class="server-wrapper">
+      <div class="server-list" id="servers"></div>
+      <div class="create-join"></div>
+    </div>
     <div class="message-wrapper">
       <div class="server-tools">
         <div id="server-title"></div>

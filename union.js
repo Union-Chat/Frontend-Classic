@@ -46,6 +46,8 @@ function load () {
 
   if (null !== _auth) {
     connect();
+  } else {
+    document.getElementById('login').removeAttribute('style');
   }
 
   window.addEventListener('keydown', () => {
@@ -86,7 +88,7 @@ function connect () {
 }
 
 function authenticateClient () {
-  if (null !== _auth) {
+  if (_auth) {
     currentUser = atob(_auth).split(':')[0];
   } else {
     const [username, password] = ['username', 'password'].map(id => document.getElementById(id).value);
@@ -196,9 +198,9 @@ function parseText (text, serverId) {
     filtered = filtered.replace(monoblock[1], `<span class="monoblock">${monoblock[2].trim()}</span>`);
   }
 
-  while (null !== (mention = mentionRegex.exec(filtered))) {
-    if (servers.get(serverId).members.some(m => m.id.toLowerCase() === mention[1].toLowerCase())) {
-      filtered = filtered.replace(mention[0], `<span class="mention">@${mention[1]}</span>`);
+  for (const m of servers.get(serverId).members) {
+    if (filtered.includes(`@${m.id}`)) {
+      filtered = filtered.replace(new RegExp(`@${m.id}`, 'g'), `<span class="mention">@${m.id}</span>`);
     }
   }
 
@@ -323,7 +325,7 @@ function snedMeHarder (event) {
   if (13 === event.keyCode && !event.shiftKey) {
     event.preventDefault();
     if (0 < msg.trim().length) {
-      request('POST', `/api/server/${selectedServer}/messages`, {
+      request('POST', `https://union.serux.pro/api/server/${selectedServer}/messages`, {
         Authorization: `Basic ${_auth}`
       }, {
         content: msg
